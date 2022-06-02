@@ -88,6 +88,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(1) ? "1" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -98,6 +99,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(2) ? "2" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -108,6 +110,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(3) ? "3" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -124,6 +127,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(4) ? "4" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -134,6 +138,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(5) ? "5" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -144,6 +149,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(6) ? "6" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -160,6 +166,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(7) ? "7" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -170,6 +177,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(8) ? "8" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -180,6 +188,7 @@ class _CellState extends State<Cell> {
                                 cellData.helperValues.contains(9) ? "9" : "",
                                 style: const TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
