@@ -1,11 +1,15 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:str8tex_frontend/Board/board_state.dart';
 
 class Cell extends StatefulWidget {
   final double cellSize;
+  final int index;
 
-  const Cell({Key? key, required this.cellSize}) : super(key: key);
+  const Cell({Key? key, required this.cellSize, required this.index})
+      : super(key: key);
 
   @override
   State<Cell> createState() => _CellState();
@@ -14,6 +18,9 @@ class Cell extends StatefulWidget {
 class _CellState extends State<Cell> {
   @override
   Widget build(BuildContext context) {
+    final cellData = context.select((BoardStateProvider p) => p.boardState.cells
+        .firstWhere((element) => element.index == widget.index));
+
     return Container(
       width: widget.cellSize,
       height: widget.cellSize,
@@ -38,7 +45,7 @@ class _CellState extends State<Cell> {
           ),
           child: Center(
               child: Text(
-            "9",
+            cellData.value > 0 ? cellData.value.toString() : "",
             style: TextStyle(
               color: const Color(0xFF8a9bd9),
               fontSize: 70 * widget.cellSize / 100,

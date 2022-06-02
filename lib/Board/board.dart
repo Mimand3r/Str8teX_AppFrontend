@@ -32,6 +32,7 @@ class _BoardState extends State<Board> {
         widget.size * widget.size,
         (index) => Cell(
           cellSize: cellSize as double,
+          index: index,
         ),
       ),
     );
