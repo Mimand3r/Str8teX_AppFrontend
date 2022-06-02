@@ -1,9 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:str8tex_frontend/Board/board.dart' show Board;
-import 'package:str8tex_frontend/Board/board_state.dart';
+import 'package:str8tex_frontend/board/board_page.dart';
+import 'package:str8tex_frontend/board/board_state.dart';
 
 void main() {
   runApp(
@@ -41,40 +39,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  void initState() {
-    super.initState();
-    context
-        .read<BoardStateProvider>()
-        .loadJSONBoard()
-        .then((value) => setState(() => wasLoaded = true));
-  }
-
-  bool wasLoaded = false;
-
-  @override
   Widget build(BuildContext context) {
-    if (!wasLoaded) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else {
-      return const Center(
-        child: Board(),
-      );
-    }
-
-    // return Scaffold(body: Builder(
-    //   builder: ((context) {
-    //     if (!wasLoaded) {
-    //       return const Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     } else {
-    //       return const Center(
-    //         child: Board(),
-    //       );
-    //     }
-    //   }),
-    // ));
+    return const Scaffold(body: BoardPage());
   }
 }

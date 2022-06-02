@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/Board/cell.dart' show Cell;
+import 'package:str8tex_frontend/board/cell.dart';
 
 class Board extends StatefulWidget {
   final int size;
@@ -28,6 +28,7 @@ class _BoardState extends State<Board> {
 
     return GridView.count(
       crossAxisCount: widget.size,
+      shrinkWrap: true,
       children: List.generate(
         widget.size * widget.size,
         (index) => Cell(

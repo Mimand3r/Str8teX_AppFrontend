@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,18 +18,30 @@ class BoardStateProvider extends ChangeNotifier {
       newBoardState.cells.add(newCell);
 
       newCell.value = cellListElement["number"];
-
       if (cellListElement["type"] == "block") {
-        newCell.cellType == CellType.block;
+        newCell.cellType = CellType.block;
       } else {
         newCell.cellType =
             newCell.value == 0 ? CellType.standard : CellType.prefilled;
       }
-
       newCell.index = indexCounter++;
     }
 
+    // Select First standard Cell
+    var firstNormalElement = newBoardState.cells
+        .firstWhere((element) => element.cellType == CellType.standard);
+    firstNormalElement.isSelected = true;
+
     boardState = newBoardState;
+    notifyListeners();
+  }
+
+  void selectNewCell(int index) {
+    boardState.cells.firstWhere((element) => element.isSelected).isSelected =
+        false;
+    boardState.cells
+        .firstWhere((element) => element.index == index)
+        .isSelected = true;
     notifyListeners();
   }
 }
@@ -45,6 +55,7 @@ class BoardStateCell {
   CellType cellType = CellType.standard;
   int value = 0;
   int index = 0;
+  bool isSelected = false;
 }
 
 enum CellType { standard, block, prefilled }
