@@ -18,7 +18,7 @@ class Cell extends StatefulWidget {
 class _CellState extends State<Cell> {
   @override
   Widget build(BuildContext context) {
-    // TODO select approach hat nicht funktioniert mit nested Attributes. Retry um zu verhindern das alle Cells redrawed werden wenn Board sich ändert
+    // TODO using select instead of watch hat nicht funktioniert mit nested Attributes. Retry um zu verhindern das alle Cells redrawed werden wenn Board sich ändert
     final provider = context.watch<BoardStateProvider>();
     final cellData = provider.boardState.cells
         .firstWhere((element) => element.index == widget.index);
@@ -55,23 +55,142 @@ class _CellState extends State<Cell> {
                   : const Color(0xFF35426b),
               borderRadius: BorderRadius.circular(2 * widget.cellSize / 100),
             ),
-            child: Center(
-                child: Text(
-              cellData.value > 0 ? cellData.value.toString() : "",
-              style: TextStyle(
-                color: const Color(0xFF8a9bd9),
-                fontSize: 70 * widget.cellSize / 100,
-                fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    color: Colors.black.withOpacity(0.6),
-                    offset: Offset(
-                        3 * widget.cellSize / 100, 3 * widget.cellSize / 100),
-                    blurRadius: 4 * widget.cellSize / 100,
+            child: Builder(builder: (context) {
+              if (cellData.value > 0) {
+                return Center(
+                    child: Text(
+                  cellData.value.toString(),
+                  style: TextStyle(
+                    color: cellData.cellType == CellType.standard
+                        ? Colors.white
+                        : const Color(0xFF8a9bd9),
+                    fontSize: 70 * widget.cellSize / 100,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(3 * widget.cellSize / 100,
+                            3 * widget.cellSize / 100),
+                        blurRadius: 4 * widget.cellSize / 100,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )),
+                ));
+              } else {
+                return Column(
+                  children: [
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(1) ? "1" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(2) ? "2" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(3) ? "3" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(4) ? "4" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(5) ? "5" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(6) ? "6" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(7) ? "7" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(8) ? "8" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                cellData.helperValues.contains(9) ? "9" : "",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }
+            }),
           ),
         ),
       ),

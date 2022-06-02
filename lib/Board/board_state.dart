@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,6 +45,42 @@ class BoardStateProvider extends ChangeNotifier {
         .isSelected = true;
     notifyListeners();
   }
+
+  void toggleValue(int pressedValue) {
+    var activeCell =
+        boardState.cells.firstWhere((element) => element.isSelected);
+
+    if (activeCell.value != pressedValue) {
+      activeCell.value = pressedValue;
+      activeCell.helperValues = [];
+    } else {
+      activeCell.value = 0;
+    }
+    notifyListeners();
+  }
+
+  void toggleHelperValue(int pressedValue) {
+    var activeCell =
+        boardState.cells.firstWhere((element) => element.isSelected);
+
+    if (activeCell.helperValues.contains(pressedValue)) {
+      activeCell.helperValues.remove(pressedValue);
+    } else {
+      activeCell.helperValues.add(pressedValue);
+    }
+
+    notifyListeners();
+  }
+
+  void clearActiveCell() {
+    var activeCell =
+        boardState.cells.firstWhere((element) => element.isSelected);
+
+    activeCell.value = 0;
+    activeCell.helperValues.clear();
+
+    notifyListeners();
+  }
 }
 
 class BoardState {
@@ -55,6 +92,7 @@ class BoardStateCell {
   CellType cellType = CellType.standard;
   int value = 0;
   int index = 0;
+  List<int> helperValues = [];
   bool isSelected = false;
 }
 
