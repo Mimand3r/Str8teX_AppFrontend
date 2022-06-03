@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "962290849811",
+    "project_id": "strate-x",
+    "storage_bucket": "strate-x.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962290849811:android:5be2672563f377fa4947e6",
+        "android_client_info": {
+          "package_name": "com.example.str8tex_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962290849811-7n331v9urunvi03osg23p8d1cr5ouqgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcALoLa3N0s2fg8nUw6Ai_YaG5hSa1BK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962290849811-7n331v9urunvi03osg23p8d1cr5ouqgl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
