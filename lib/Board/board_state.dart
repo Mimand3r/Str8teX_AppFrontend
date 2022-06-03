@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,6 +24,10 @@ class BoardStateProvider extends ChangeNotifier {
         newCell.cellType =
             newCell.value == 0 ? CellType.standard : CellType.prefilled;
       }
+
+      newCell.row = (indexCounter / newBoardState.size).floor();
+      newCell.col = indexCounter % newBoardState.size;
+
       newCell.index = indexCounter++;
     }
 
@@ -94,6 +97,8 @@ class BoardStateCell {
   int index = 0;
   List<int> helperValues = [];
   bool isSelected = false;
+  int row = 0;
+  int col = 0;
 }
 
 enum CellType { standard, block, prefilled }

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:str8tex_frontend/board/board_state.dart';
+import 'package:str8tex_frontend/Board/board_state.dart';
 
 class Cell extends StatefulWidget {
   final double cellSize;
@@ -62,7 +62,7 @@ class _CellState extends State<Cell> {
                   cellData.value.toString(),
                   style: TextStyle(
                     color: cellData.cellType == CellType.standard
-                        ? Colors.white
+                        ? whiteOrRed(cellData.value, cellData, provider)
                         : const Color(0xFF8a9bd9),
                     fontSize: 70 * widget.cellSize / 100,
                     fontWeight: FontWeight.bold,
@@ -86,8 +86,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(1) ? "1" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(1, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -97,8 +97,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(2) ? "2" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(2, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -108,8 +108,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(3) ? "3" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(3, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -125,8 +125,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(4) ? "4" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(4, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -136,8 +136,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(5) ? "5" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(5, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -147,8 +147,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(6) ? "6" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(6, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -164,8 +164,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(7) ? "7" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(7, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -175,8 +175,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(8) ? "8" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(8, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -186,8 +186,8 @@ class _CellState extends State<Cell> {
                             child: Center(
                               child: Text(
                                 cellData.helperValues.contains(9) ? "9" : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: whiteOrRed(9, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -204,5 +204,16 @@ class _CellState extends State<Cell> {
         ),
       ),
     );
+  }
+
+  Color whiteOrRed(
+      int value, BoardStateCell cell, BoardStateProvider provider) {
+    var otherCellsInRowOrCol = provider.boardState.cells
+        .where((el) => el != cell && (el.col == cell.col || el.row == cell.row))
+        .toList();
+
+    var isInUse = otherCellsInRowOrCol.any((el) => el.value == value);
+
+    return isInUse ? Colors.red : Colors.white;
   }
 }
