@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/board/cell.dart';
+import 'package:str8tex_frontend/Board/cell.dart';
 
 class Board extends StatefulWidget {
   final int size;
