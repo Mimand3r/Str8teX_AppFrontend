@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_page.dart';
 import 'package:str8tex_frontend/Board/board_state.dart';
+import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
+import 'package:str8tex_frontend/LevelManagement/level_page.dart';
 import 'package:str8tex_frontend/firebase_options.dart';
 
 void main() async {
@@ -11,8 +13,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => BoardStateProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BoardStateProvider()),
+        ChangeNotifierProvider(create: (context) => LevelManager()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -46,6 +51,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: BoardPage());
+    return FutureBuilder(
+        future: context.read<LevelManager>().initializeLevels(),
+        builder: (b, s) {
+          if (s.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (s.hasError) return Center(child: Text('Error: ${s.error}'));
+            return const Scaffold(body: LevelPage());
+          }
+        });
   }
 }

@@ -1,22 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/db_level_type.dart';
 
 class BoardStateProvider extends ChangeNotifier {
   BoardState boardState = BoardState();
 
-  Future loadJSONBoard() async {
-    var text = await rootBundle.loadString('assets/example_board.json');
-    Map<String, dynamic> jsonData = jsonDecode(text);
+  Future loadBoard(DatabaseLevelType databaseData) async {
+    // TODO in progress board not displayed correctly yet
 
-    var newBoardState = BoardState();
-    newBoardState.size = jsonData["size"];
-    var cellList = List.from(jsonData["cells"]);
+    var newBoardState = BoardState()..size = databaseData.size;
+    List<dynamic> cellList = jsonDecode(databaseData.emptyBoardData);
     var indexCounter = 0;
     for (var cellListElement in cellList) {
       var newCell = BoardStateCell();
-      newBoardState.cells.add(newCell);
-
       newCell.value = cellListElement["number"];
       if (cellListElement["type"] == "block") {
         newCell.cellType = CellType.block;
@@ -24,11 +20,11 @@ class BoardStateProvider extends ChangeNotifier {
         newCell.cellType =
             newCell.value == 0 ? CellType.standard : CellType.prefilled;
       }
-
       newCell.row = (indexCounter / newBoardState.size).floor();
       newCell.col = indexCounter % newBoardState.size;
-
       newCell.index = indexCounter++;
+
+      newBoardState.cells.add(newCell);
     }
 
     // Select First standard Cell
