@@ -62,19 +62,28 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              width: 100,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color.fromARGB(255, 28, 36, 61),
-              ),
-              child: const Center(
-                child: Text(
-                  "undo",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+            GestureDetector(
+              onTap: () {
+                context.read<BoardStateProvider>().undo();
+              },
+              child: Container(
+                width: 100,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: (context.watch<BoardStateProvider>().history.length -
+                              context.watch<BoardStateProvider>().undoCounter >
+                          0) // disabled mode
+                      ? const Color.fromARGB(255, 28, 36, 61)
+                      : const Color.fromARGB(255, 114, 115, 119),
+                ),
+                child: const Center(
+                  child: Text(
+                    "undo",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),
@@ -101,19 +110,27 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
                 ),
               ),
             ),
-            Container(
-              width: 100,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color.fromARGB(255, 28, 36, 61),
-              ),
-              child: const Center(
-                child: Text(
-                  "redo",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+            GestureDetector(
+              onTap: () {
+                context.read<BoardStateProvider>().redo();
+              },
+              child: Container(
+                width: 100,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: context.watch<BoardStateProvider>().undoCounter >
+                          0 // disabled mode
+                      ? const Color.fromARGB(255, 28, 36, 61)
+                      : const Color.fromARGB(255, 114, 115, 119),
+                ),
+                child: const Center(
+                  child: Text(
+                    "redo",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),

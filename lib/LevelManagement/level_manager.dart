@@ -15,8 +15,8 @@ class LevelManager extends ChangeNotifier {
     debugPrint("Hallo Level Manager");
 
     // Update internal Level Data for preinstalled Levels
-    await SQFLiteWorker.openDatabaseForSession();
-    await SQFLiteWorker.createTablesIfNotExistant();
+    await SQFLiteWorker.openDatabaseForAppSession();
+    await SQFLiteWorker.createDatabaseTablesIfNotExistant();
     var storedLevels = await SQFLiteWorker.getAllStoredLevelNames();
     await PreinstalledLevelWorker.storeInitialLevelsIntoDatabaseIfNotExistant(
         storedLevels);
@@ -24,14 +24,18 @@ class LevelManager extends ChangeNotifier {
     // Update internal Level Data for Firebase Levels
     var firebaseLevelNames =
         await FirebaseStorageWorker.fetchLevelNamesFromFirebase();
+    await FirebaseStorageWorker.downloadAndStoreMissingLevels(
+        firebaseLevelNames, storedLevels);
 
     // Load Metadata for all internal Levels
-    levelMetaData = await SQFLiteWorker.fetchMetaDataForAllLevels();
+    levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
+
     debugPrint("Finished");
   }
 
   Future<DatabaseLevelType> loadLevelData(String levelName) async {
-    var data = await SQFLiteWorker.fetchFullLevelData(levelName);
+    var data =
+        await SQFLiteWorker.fetchFullStoredLevelDataForSpecificLevel(levelName);
     return data;
   }
 }

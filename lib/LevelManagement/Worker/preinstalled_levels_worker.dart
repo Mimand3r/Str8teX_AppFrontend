@@ -19,14 +19,14 @@ class PreinstalledLevelWorker {
   static Future storeInitialLevelsIntoDatabaseIfNotExistant(
       List<String> databaseLevels) async {
     // Finde raus welche Daten in DB fehlen
-    var initialLevelsNotInDatabase = initialLevels
+    var namesInitialLevelsNotInDatabase = initialLevels
         .where((element) => !databaseLevels.contains(element))
         .toList();
 
     // Fetch Daten from files und package for DB
     List<DatabaseLevelType> unstoredLevels = [];
 
-    for (var levelName in initialLevelsNotInDatabase) {
+    for (var levelName in namesInitialLevelsNotInDatabase) {
       final jsonText =
           await rootBundle.loadString('assets/$levelName', cache: false);
       final data = json.decode(jsonText);
