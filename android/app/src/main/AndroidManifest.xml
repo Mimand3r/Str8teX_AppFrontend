@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.str8tex_frontend">
+    package="com.mimander.str8ts_x">
    <application
         android:label="str8tex_frontend"
         android:name="${applicationName}"

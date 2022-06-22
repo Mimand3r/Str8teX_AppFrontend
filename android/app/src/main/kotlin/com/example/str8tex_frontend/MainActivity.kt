@@ -1,4 +1,4 @@
-package com.example.str8tex_frontend
+package com.mimander.str8ts_x
 
 import io.flutter.embedding.android.FlutterActivity
 

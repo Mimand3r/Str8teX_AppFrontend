@@ -40,6 +40,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962290849811:android:6a1cef7dbdfee78d4947e6",
+        "android_client_info": {
+          "package_name": "com.mimander.str8ts_x"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962290849811-7n331v9urunvi03osg23p8d1cr5ouqgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcALoLa3N0s2fg8nUw6Ai_YaG5hSa1BK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962290849811-7n331v9urunvi03osg23p8d1cr5ouqgl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "962290849811-f8vlpm96kroli34jc9kds71t3mhu8gk8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.str8texFrontend"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
