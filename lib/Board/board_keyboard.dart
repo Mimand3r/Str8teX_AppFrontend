@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:str8tex_frontend/Board/board_state.dart';
+import 'package:str8tex_frontend/Board/board_state_provider.dart';
 
 class BoardKeyboard extends StatefulWidget {
   const BoardKeyboard({Key? key}) : super(key: key);
@@ -136,6 +136,30 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
               ),
             )
           ],
+        ),
+        const SizedBox(height: 5),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              context.read<BoardStateProvider>().restartLevel();
+            },
+            child: Container(
+              width: 100,
+              height: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color.fromARGB(255, 28, 36, 61)),
+              child: const Center(
+                child: Text(
+                  "restart",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
         )
       ],
     );

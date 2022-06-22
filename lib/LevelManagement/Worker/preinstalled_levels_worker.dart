@@ -1,8 +1,6 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/db_level_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
 
 class PreinstalledLevelWorker {

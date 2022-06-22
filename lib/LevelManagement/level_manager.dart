@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/db_level_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/preinstalled_levels_worker.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
@@ -12,8 +10,6 @@ class LevelManager extends ChangeNotifier {
   late List<LevelMetaType> levelMetaData;
 
   Future initializeLevels() async {
-    debugPrint("Hallo Level Manager");
-
     // Update internal Level Data for preinstalled Levels
     await SQFLiteWorker.openDatabaseForAppSession();
     await SQFLiteWorker.createDatabaseTablesIfNotExistant();
@@ -29,8 +25,6 @@ class LevelManager extends ChangeNotifier {
 
     // Load Metadata for all internal Levels
     levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
-
-    debugPrint("Finished");
   }
 
   Future<DatabaseLevelType> loadLevelData(String levelName) async {

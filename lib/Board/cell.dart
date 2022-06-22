@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:str8tex_frontend/Board/board_state.dart';
+import 'package:str8tex_frontend/Board/board_state_provider.dart';
+import 'Types/board_state_type.dart';
 
 class Cell extends StatefulWidget {
   final double cellSize;
@@ -20,7 +21,7 @@ class _CellState extends State<Cell> {
   Widget build(BuildContext context) {
     // TODO using select instead of watch hat nicht funktioniert mit nested Attributes. Retry um zu verhindern das alle Cells redrawed werden wenn Board sich ändert
     final provider = context.watch<BoardStateProvider>();
-    final cellData = provider.boardState.cells
+    final cellData = provider.currentBoardState.cells
         .firstWhere((element) => element.index == widget.index);
 
     return GestureDetector(
@@ -208,7 +209,7 @@ class _CellState extends State<Cell> {
 
   Color whiteOrRed(
       int value, BoardStateCell cell, BoardStateProvider provider) {
-    var otherCellsInRowOrCol = provider.boardState.cells
+    var otherCellsInRowOrCol = provider.currentBoardState.cells
         .where((el) => el != cell && (el.col == cell.col || el.row == cell.row))
         .toList();
 

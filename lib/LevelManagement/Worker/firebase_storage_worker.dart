@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Types/db_level_type.dart';
+import '../Types/database_level_type.dart';
 import 'sqflite_worker.dart';
 
 class FirebaseStorageWorker {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_keyboard.dart';
 import 'package:str8tex_frontend/Board/board.dart';
-import 'package:str8tex_frontend/Board/board_state.dart';
+import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
 
 class BoardPage extends StatefulWidget {

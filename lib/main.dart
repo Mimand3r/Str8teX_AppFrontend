@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:str8tex_frontend/Board/board_state.dart';
+import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
 import 'package:str8tex_frontend/LevelManagement/level_page.dart';
 import 'package:str8tex_frontend/firebase_options.dart';

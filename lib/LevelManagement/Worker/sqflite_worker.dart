@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:str8tex_frontend/Board/Types/board_state_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
-
-import '../Types/db_level_type.dart';
+import '../Types/database_level_type.dart';
 
 class SQFLiteWorker {
   static const String databaseName = "strate_x_main.db";
@@ -19,10 +18,10 @@ class SQFLiteWorker {
     var dbPath = join(databaseRootPath, tableLevels);
     openedDatabase = await openDatabase(dbPath, version: 1);
 
-    // To get DB Size in Byte:
-    final file = File(dbPath);
-    final size = await file.length();
-    debugPrint(size.toString());
+    // // To get DB Size in Byte:
+    // final file = File(dbPath);
+    // final size = await file.length();
+    // debugPrint(size.toString());
   }
 
   static Future createDatabaseTablesIfNotExistant() async {
@@ -53,10 +52,14 @@ class SQFLiteWorker {
       List<DatabaseLevelType> unstoredLevels) async {
     await openedDatabase.transaction((txn) async {
       for (var unstoredLevel in unstoredLevels) {
+        var emptyProgressBoard = BoardState.createFromJson(
+                unstoredLevel.emptyBoardData, unstoredLevel.size)
+            .serializeToString();
+
         var id = await txn.rawInsert(
             "INSERT INTO $tableLevels(level_name, empty_board, progress_board, solution_board, size, curr_time, rekord_time)"
             "VALUES('${unstoredLevel.levelName}','${unstoredLevel.emptyBoardData}',"
-            "'${unstoredLevel.emptyBoardData}', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
+            "'$emptyProgressBoard', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
             "0, 0)");
         debugPrint("New Element with ID $id inserted");
       }
@@ -89,7 +92,15 @@ class SQFLiteWorker {
     return DatabaseLevelType()
       ..levelName = query.first["level_name"] as String
       ..emptyBoardData = query.first["empty_board"] as String
+      ..progressBoardData = query.first["progress_board"] as String
       ..solvedBoardData = query.first["solution_board"] as String
       ..size = query.first["size"] as int;
+  }
+
+  static Future writeProgressToDatabase(
+      String levelName, BoardState boardState) async {
+    await openedDatabase.rawUpdate(
+        "UPDATE $tableLevels SET progress_board = ? WHERE level_name = '$levelName'",
+        [boardState.serializeToString()]);
   }
 }
