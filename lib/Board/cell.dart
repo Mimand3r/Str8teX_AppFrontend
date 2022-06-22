@@ -19,13 +19,12 @@ class Cell extends StatefulWidget {
 class _CellState extends State<Cell> {
   @override
   Widget build(BuildContext context) {
-    // TODO using select instead of watch hat nicht funktioniert mit nested Attributes. Retry um zu verhindern das alle Cells redrawed werden wenn Board sich ändert
     final provider = context.watch<BoardStateProvider>();
     final cellData = provider.currentBoardState.cells
         .firstWhere((element) => element.index == widget.index);
 
     return GestureDetector(
-      onTap: () {
+      onTapDown: (d) {
         if (cellData.cellType != CellType.standard) return;
         if (cellData.isSelected) return;
         context.read<BoardStateProvider>().selectNewCell(cellData.index);

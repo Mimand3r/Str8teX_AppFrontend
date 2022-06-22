@@ -5,6 +5,7 @@ import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
 import 'package:str8tex_frontend/LevelManagement/level_page.dart';
 import 'package:str8tex_frontend/firebase_options.dart';
+import 'package:str8tex_frontend/main_menu.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (s.hasError) return Center(child: Text('Error: ${s.error}'));
-            return const Scaffold(body: LevelPage());
+            return const Scaffold(body: SafeArea(child: MainMenu()));
           }
         });
   }
