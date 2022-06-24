@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
-import 'package:str8tex_frontend/LevelManagement/level_page.dart';
 import 'package:str8tex_frontend/firebase_options.dart';
 import 'package:str8tex_frontend/main_menu.dart';
 
@@ -12,15 +12,20 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => BoardStateProvider()),
-        ChangeNotifierProvider(create: (context) => LevelManager()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => BoardStateProvider()),
+          ChangeNotifierProvider(create: (context) => LevelManager()),
+        ],
+        child: const MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
