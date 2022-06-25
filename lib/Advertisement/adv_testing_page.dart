@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:str8tex_frontend/Advertisement/banner.dart';
 import 'package:str8tex_frontend/Advertisement/interstertial.dart';
+import 'package:str8tex_frontend/Advertisement/rewarded.dart';
+import 'package:str8tex_frontend/Advertisement/rewarded_interstitial.dart';
 
 class WerbeTestingPage extends StatefulWidget {
   const WerbeTestingPage({Key? key}) : super(key: key);
@@ -15,7 +17,7 @@ class _WerbeTestingPageState extends State<WerbeTestingPage> {
     return Center(
         child: Column(
       children: [
-        const SizedBox(height: 200),
+        const SizedBox(height: 100),
         GestureDetector(
           onTap: () {
             showInterstitial();
@@ -24,6 +26,30 @@ class _WerbeTestingPageState extends State<WerbeTestingPage> {
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Text("Interstitial Test"),
+            ),
+          ),
+        ),
+        const SizedBox(height: 100),
+        GestureDetector(
+          onTap: () {
+            showRewarded();
+          },
+          child: const Card(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text("Rewarded Test"),
+            ),
+          ),
+        ),
+        const SizedBox(height: 100),
+        GestureDetector(
+          onTap: () {
+            showRewardedInterstitial();
+          },
+          child: const Card(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text("Rewarded Interstitital Test"),
             ),
           ),
         ),
