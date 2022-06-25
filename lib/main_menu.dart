@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:str8tex_frontend/Advertisement/adv_testing_page.dart';
 import 'package:str8tex_frontend/LevelManagement/level_page.dart';
 
 class MainMenu extends StatefulWidget {
@@ -35,6 +36,25 @@ class _MainMenuState extends State<MainMenu> {
               ),
               child: const Center(
                 child: Text("Starten"),
+              ),
+            ),
+          ),
+          const SizedBox(height: 150),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (c) => const Scaffold(
+                      body: SafeArea(child: WerbeTestingPage()))));
+            },
+            child: Container(
+              height: 50,
+              width: 250,
+              decoration: BoxDecoration(
+                border: Border.all(width: 1),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: const Center(
+                child: Text("Werbung Testen"),
               ),
             ),
           )
