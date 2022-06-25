@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
+import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
 import 'Types/board_state_type.dart';
 
 class BoardStateProvider extends ChangeNotifier {
   BoardState currentBoardState = BoardState();
+  bool isFinished = true;
 
   // Undo Redo Fields
   List<BoardState> history = [];
@@ -35,6 +37,8 @@ class BoardStateProvider extends ChangeNotifier {
         databaseData.emptyBoardData, databaseData.size);
     solutionBoard = BoardState.createFromJson(
         databaseData.solvedBoardData, databaseData.size);
+
+    isFinished = false;
 
     notifyListeners();
   }
@@ -76,11 +80,35 @@ class BoardStateProvider extends ChangeNotifier {
     if (activeCell.value != pressedValue) {
       activeCell.value = pressedValue;
       activeCell.helperValues = [];
+      _checkForGameEnd();
     } else {
       activeCell.value = 0;
     }
     notifyListeners();
     SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+  }
+
+  _checkForGameEnd() {
+    if (currentBoardState.cells.any((element) =>
+        element.cellType == CellType.standard && element.value == 0)) return;
+
+    // check if Solution is matched
+    var standardCells = currentBoardState.cells
+        .where((element) => element.cellType == CellType.standard)
+        .toList();
+    var solutionValid = true;
+    for (var cell in standardCells) {
+      var passendeCellInSolution = solutionBoard.cells[cell.index];
+      if (passendeCellInSolution.value != cell.value) {
+        solutionValid = false;
+        break;
+      }
+    }
+
+    if (solutionValid) isFinished = true;
+    SQFLiteWorker.writeIsSolvedToDatabaseAndResetProgress(
+        currentLevelName, emptyBoard);
+    LevelManager.instance.changeMetaDataToSolved(currentLevelName);
   }
 
   void toggleHelperValue(int pressedValue) {

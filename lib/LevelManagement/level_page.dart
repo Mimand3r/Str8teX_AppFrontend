@@ -13,7 +13,7 @@ class LevelPage extends StatefulWidget {
 class _LevelPageState extends State<LevelPage> {
   @override
   Widget build(BuildContext context) {
-    var levels = context.read<LevelManager>().levelMetaData;
+    var levels = context.watch<LevelManager>().levelMetaData;
     return Center(
       child: ListView(
         shrinkWrap: true,
@@ -48,15 +48,9 @@ class _LevelPageState extends State<LevelPage> {
                                 Text("Size: ${e.size}", style: smallText()),
                                 const SizedBox(width: 5),
                                 Text(
-                                  "Time: ${e.currentTime}",
+                                  "IsSolved: ${e.isSolved.toString()}",
                                   style: smallText(),
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  "Rekord: ${e.rekordTime}",
-                                  style: smallText(),
-                                ),
-                                const SizedBox(width: 5),
+                                )
                               ],
                             )
                           ],

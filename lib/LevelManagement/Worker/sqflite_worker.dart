@@ -34,8 +34,7 @@ class SQFLiteWorker {
         "progress_board TEXT,"
         "solution_board TEXT,"
         "size INTEGER,"
-        "curr_time INTEGER,"
-        "rekord_time INTEGER"
+        "is_solved BOOLEAN" // 0 oder 1
         ")");
   }
 
@@ -57,26 +56,25 @@ class SQFLiteWorker {
             .serializeToString();
 
         var id = await txn.rawInsert(
-            "INSERT INTO $tableLevels(level_name, empty_board, progress_board, solution_board, size, curr_time, rekord_time)"
+            "INSERT INTO $tableLevels(level_name, empty_board, progress_board, solution_board, size, is_solved)"
             "VALUES('${unstoredLevel.levelName}','${unstoredLevel.emptyBoardData}',"
             "'$emptyProgressBoard', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
-            "0, 0)");
+            "0)");
         debugPrint("New Element with ID $id inserted");
       }
     });
   }
 
   static Future<List<LevelMetaType>> fetchMetaDataForAllStoredLevels() async {
-    var query = await openedDatabase.rawQuery(
-        'SELECT level_name, size, curr_time, rekord_time FROM $tableLevels');
+    var query = await openedDatabase
+        .rawQuery('SELECT level_name, size, is_solved FROM $tableLevels');
 
     List<LevelMetaType> metaListe = [];
 
     for (var el in query) {
       var newElement = LevelMetaType(
         levelName: el["level_name"] as String,
-        currentTime: el["curr_time"] as int,
-        rekordTime: el["rekord_time"] as int,
+        isSolved: el["is_solved"] != 0,
         size: el["size"] as int,
       );
       metaListe.add(newElement);
@@ -102,5 +100,14 @@ class SQFLiteWorker {
     await openedDatabase.rawUpdate(
         "UPDATE $tableLevels SET progress_board = ? WHERE level_name = '$levelName'",
         [boardState.serializeToString()]);
+  }
+
+  static Future writeIsSolvedToDatabaseAndResetProgress(
+      String levelName, BoardState emptyBoard) async {
+    await openedDatabase.rawUpdate(
+        "UPDATE $tableLevels SET is_solved = 1 WHERE level_name = '$levelName'");
+    await openedDatabase.rawUpdate(
+        "UPDATE $tableLevels SET progress_board = ? WHERE level_name = '$levelName'",
+        [emptyBoard.serializeToString()]);
   }
 }

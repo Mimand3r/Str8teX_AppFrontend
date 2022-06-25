@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_keyboard.dart';
 import 'package:str8tex_frontend/Board/board.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
+import 'package:str8tex_frontend/Board/board_winning_page.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
 
 class BoardPage extends StatefulWidget {
@@ -32,6 +33,11 @@ class _BoardPageState extends State<BoardPage> {
 
   @override
   Widget build(BuildContext context) {
+    var isSolved =
+        context.select<BoardStateProvider, bool>((value) => value.isFinished);
+
+    if (isSolved) return const BoardWinningScreen();
+
     return Builder(
       builder: ((context) {
         if (!wasLoaded) {

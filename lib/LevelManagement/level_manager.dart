@@ -9,6 +9,12 @@ import 'Worker/firebase_storage_worker.dart';
 class LevelManager extends ChangeNotifier {
   late List<LevelMetaType> levelMetaData;
 
+  static late LevelManager instance;
+
+  LevelManager() {
+    instance = this;
+  }
+
   Future initializeLevels() async {
     // Update internal Level Data for preinstalled Levels
     await SQFLiteWorker.openDatabaseForAppSession();
@@ -31,5 +37,13 @@ class LevelManager extends ChangeNotifier {
     var data =
         await SQFLiteWorker.fetchFullStoredLevelDataForSpecificLevel(levelName);
     return data;
+  }
+
+  void changeMetaDataToSolved(String levelName) {
+    debugPrint("got executed");
+    levelMetaData
+        .firstWhere((element) => element.levelName == levelName)
+        .isSolved = true;
+    notifyListeners();
   }
 }
