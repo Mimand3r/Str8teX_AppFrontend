@@ -1,14 +1,13 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
 class BoardState {
   int size = 9;
   List<BoardStateCell> cells = [];
 
   BoardState makeCopy() => BoardState()
     ..size = size
-    ..cells = cells.map((e) => e.makeCopy()).toList();
+    ..cells = cells.map((e) => e.makeCopy()).toList()
+    .._calcStr8tes();
 
   static BoardState createFromJson(String json, int size) {
     var newBoardState = BoardState()..size = size;
@@ -147,9 +146,7 @@ class BoardStateCell {
     ..helperValues = List<int>.from(helperValues)
     ..isSelected = isSelected
     ..row = row
-    ..col = col
-    ..horizontalStr8te = List<BoardStateCell>.from(horizontalStr8te)
-    ..verticalStr8te = List<BoardStateCell>.from(verticalStr8te);
+    ..col = col;
 }
 
 enum CellType { standard, block, prefilled }
