@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 class BoardState {
   int size = 9;
   List<BoardStateCell> cells = [];
@@ -27,6 +29,8 @@ class BoardState {
 
       newBoardState.cells.add(newCell);
     }
+
+    newBoardState._calcStr8tes();
 
     return newBoardState;
   }
@@ -70,7 +74,58 @@ class BoardState {
             ..col = c["col"])
           .toList();
 
+    extractedState._calcStr8tes();
+
     return extractedState;
+  }
+
+  _calcStr8tes() {
+    for (var cell in cells) {
+      if (cell.cellType == CellType.block) continue;
+      // find hor str8te partners
+      var allRowPartners =
+          cells.where((element) => element.row == cell.row).toList();
+      var cellRowIndex = allRowPartners.indexOf(cell);
+      var horStrateStart = 0;
+      for (var i = cellRowIndex; i > -1; i--) {
+        if (allRowPartners[i].cellType == CellType.block) {
+          horStrateStart = i + 1;
+          break;
+        }
+      }
+      var horStrateEnd = allRowPartners.length - 1;
+      for (var i = cellRowIndex; i < allRowPartners.length; i++) {
+        if (allRowPartners[i].cellType == CellType.block) {
+          horStrateEnd = i - 1;
+          break;
+        }
+      }
+      cell.horizontalStr8te =
+          allRowPartners.sublist(horStrateStart, horStrateEnd + 1);
+
+      // find vert str8te partners
+
+      var allColPartners =
+          cells.where((element) => element.col == cell.col).toList();
+      var cellColIndex = allColPartners.indexOf(cell);
+      var vertStrateStart = 0;
+      for (var i = cellColIndex; i > -1; i--) {
+        if (allColPartners[i].cellType == CellType.block) {
+          vertStrateStart = i + 1;
+          break;
+        }
+      }
+      var vertStrateEnd = allColPartners.length - 1;
+      for (var i = cellColIndex; i < allColPartners.length; i++) {
+        if (allColPartners[i].cellType == CellType.block) {
+          vertStrateEnd = i - 1;
+          break;
+        }
+      }
+
+      cell.verticalStr8te =
+          allColPartners.sublist(vertStrateStart, vertStrateEnd + 1);
+    }
   }
 }
 
@@ -82,6 +137,8 @@ class BoardStateCell {
   bool isSelected = false;
   int row = 0;
   int col = 0;
+  List<BoardStateCell> horizontalStr8te = [];
+  List<BoardStateCell> verticalStr8te = [];
 
   BoardStateCell makeCopy() => BoardStateCell()
     ..cellType = cellType
@@ -90,7 +147,9 @@ class BoardStateCell {
     ..helperValues = List<int>.from(helperValues)
     ..isSelected = isSelected
     ..row = row
-    ..col = col;
+    ..col = col
+    ..horizontalStr8te = List<BoardStateCell>.from(horizontalStr8te)
+    ..verticalStr8te = List<BoardStateCell>.from(verticalStr8te);
 }
 
 enum CellType { standard, block, prefilled }

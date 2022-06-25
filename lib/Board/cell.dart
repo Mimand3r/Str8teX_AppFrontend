@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
@@ -62,7 +64,7 @@ class _CellState extends State<Cell> {
                   cellData.value.toString(),
                   style: TextStyle(
                     color: cellData.cellType == CellType.standard
-                        ? whiteOrRed(cellData.value, cellData, provider)
+                        ? colorValues(cellData.value, cellData, provider)
                         : const Color(0xFF8a9bd9),
                     fontSize: 70 * widget.cellSize / 100,
                     fontWeight: FontWeight.bold,
@@ -87,7 +89,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(1) ? "1" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(1, cellData, provider),
+                                  color:
+                                      colorHelperValues(1, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -98,7 +101,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(2) ? "2" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(2, cellData, provider),
+                                  color:
+                                      colorHelperValues(2, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -109,7 +113,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(3) ? "3" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(3, cellData, provider),
+                                  color:
+                                      colorHelperValues(3, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -126,7 +131,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(4) ? "4" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(4, cellData, provider),
+                                  color:
+                                      colorHelperValues(4, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -137,7 +143,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(5) ? "5" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(5, cellData, provider),
+                                  color:
+                                      colorHelperValues(5, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -148,7 +155,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(6) ? "6" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(6, cellData, provider),
+                                  color:
+                                      colorHelperValues(6, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -165,7 +173,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(7) ? "7" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(7, cellData, provider),
+                                  color:
+                                      colorHelperValues(7, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -176,7 +185,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(8) ? "8" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(8, cellData, provider),
+                                  color:
+                                      colorHelperValues(8, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -187,7 +197,8 @@ class _CellState extends State<Cell> {
                               child: Text(
                                 cellData.helperValues.contains(9) ? "9" : "",
                                 style: TextStyle(
-                                  color: whiteOrRed(9, cellData, provider),
+                                  color:
+                                      colorHelperValues(9, cellData, provider),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -206,7 +217,54 @@ class _CellState extends State<Cell> {
     );
   }
 
-  Color whiteOrRed(
+  Color colorValues(
+      int value, BoardStateCell cell, BoardStateProvider provider) {
+    var otherCellsInRowOrCol = provider.currentBoardState.cells
+        .where((el) => el != cell && (el.col == cell.col || el.row == cell.row))
+        .toList();
+
+    var isInUse = otherCellsInRowOrCol.any((el) => el.value == value);
+
+    if (isInUse) return Colors.red;
+
+    var isPartOfCompletedFailureStr8te = false;
+
+    var horIsUnCompleted =
+        cell.horizontalStr8te.any((element) => element.value == 0);
+
+    if (!horIsUnCompleted) {
+      var valueList = cell.horizontalStr8te.map((e) => e.value).toList();
+      var smallest = valueList.reduce(min);
+      var biggest = valueList.reduce(max);
+      for (var i = smallest; i < biggest; i++) {
+        if (!valueList.contains(i)) {
+          isPartOfCompletedFailureStr8te = true;
+          break;
+        }
+      }
+    }
+
+    var vertIsUnCompleted =
+        cell.verticalStr8te.any((element) => element.value == 0);
+
+    if (!vertIsUnCompleted) {
+      var valueList = cell.verticalStr8te.map((e) => e.value).toList();
+      var smallest = valueList.reduce(min);
+      var biggest = valueList.reduce(max);
+      for (var i = smallest; i < biggest; i++) {
+        if (!valueList.contains(i)) {
+          isPartOfCompletedFailureStr8te = true;
+          break;
+        }
+      }
+    }
+
+    if (isPartOfCompletedFailureStr8te) return Colors.orange;
+
+    return Colors.white;
+  }
+
+  Color colorHelperValues(
       int value, BoardStateCell cell, BoardStateProvider provider) {
     var otherCellsInRowOrCol = provider.currentBoardState.cells
         .where((el) => el != cell && (el.col == cell.col || el.row == cell.row))
