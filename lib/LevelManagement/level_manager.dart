@@ -3,7 +3,6 @@ import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart'
 import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/preinstalled_levels_worker.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
-
 import 'Worker/firebase_storage_worker.dart';
 
 class LevelManager extends ChangeNotifier {
@@ -19,18 +18,22 @@ class LevelManager extends ChangeNotifier {
     // Update internal Level Data for preinstalled Levels
     await SQFLiteWorker.openDatabaseForAppSession();
     await SQFLiteWorker.createDatabaseTablesIfNotExistant();
-    var storedLevels = await SQFLiteWorker.getAllStoredLevelNames();
-    await PreinstalledLevelWorker.storeInitialLevelsIntoDatabaseIfNotExistant(
-        storedLevels);
+    final clusterIdsAndLevelNames =
+        await SQFLiteWorker.getAllStoredClusterIdsAndLevelNames();
+    final clusterIds = clusterIdsAndLevelNames[0] as List<int>;
+    final levelNames = clusterIdsAndLevelNames[1] as List<String>;
+    await PreinstalledLevelWorker
+        .storeInitialLevelsAndClustersIntoDatabaseIfNotExistant(
+            clusterIds, levelNames);
 
-    // Update internal Level Data for Firebase Levels
-    var firebaseLevelNames =
-        await FirebaseStorageWorker.fetchLevelNamesFromFirebase();
-    await FirebaseStorageWorker.downloadAndStoreMissingLevels(
-        firebaseLevelNames, storedLevels);
+    // // Update internal Level Data for Firebase Levels
+    // var firebaseLevelNames =
+    //     await FirebaseStorageWorker.fetchLevelNamesFromFirebase();
+    // await FirebaseStorageWorker.downloadAndStoreMissingLevels(
+    //     firebaseLevelNames, storedLevels);
 
-    // Load Metadata for all internal Levels
-    levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
+    // // Load Metadata for all internal Levels
+    // levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
   }
 
   Future<DatabaseLevelType> loadLevelData(String levelName) async {

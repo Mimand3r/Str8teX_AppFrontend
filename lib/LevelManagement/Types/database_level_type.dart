@@ -4,4 +4,5 @@ class DatabaseLevelType {
   late String progressBoardData;
   late String solvedBoardData;
   late int size;
+  late int clusterId;
 }

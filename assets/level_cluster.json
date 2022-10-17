@@ -1,0 +1,22 @@
+[
+    {
+        "index": 1,
+        "name": "Heu",
+        "level": [
+            "initial_level_001.json",
+            "initial_level_002.json",
+            "initial_level_003.json",
+            "initial_level_004.json"
+        ]
+    },
+    {
+        "index": 2,
+        "name": "Gras",
+        "level": [
+            "initial_level_005.json",
+            "initial_level_006.json",
+            "initial_level_007.json",
+            "initial_level_008.json"
+        ]
+    }
+]
