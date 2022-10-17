@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
-import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
+import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
 import 'Types/board_state_type.dart';
 
 class BoardStateProvider extends ChangeNotifier {
@@ -108,7 +108,7 @@ class BoardStateProvider extends ChangeNotifier {
     if (solutionValid) isFinished = true;
     SQFLiteWorker.writeIsSolvedToDatabaseAndResetProgress(
         currentLevelName, emptyBoard);
-    LevelManager.instance.changeMetaDataToSolved(currentLevelName);
+    LevelManagerProvider.instance.changeMetaDataToSolved(currentLevelName);
   }
 
   void toggleHelperValue(int pressedValue) {

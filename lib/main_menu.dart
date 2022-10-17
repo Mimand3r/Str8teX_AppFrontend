@@ -12,53 +12,56 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 70),
-          const Text(
-            "Str8ts X",
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 70),
+              const Text(
+                "Str8ts X",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 150),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (c) => const LevelPage()));
+                },
+                child: Container(
+                  height: 50,
+                  width: 250,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Center(
+                    child: Text("Starten"),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 150),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (c) => const Scaffold(
+                          body: SafeArea(child: WerbeTestingPage()))));
+                },
+                child: Container(
+                  height: 50,
+                  width: 250,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Center(
+                    child: Text("Werbung Testen"),
+                  ),
+                ),
+              )
+            ],
           ),
-          const SizedBox(height: 150),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (c) =>
-                      const Scaffold(body: SafeArea(child: LevelPage()))));
-            },
-            child: Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: const Center(
-                child: Text("Starten"),
-              ),
-            ),
-          ),
-          const SizedBox(height: 150),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (c) => const Scaffold(
-                      body: SafeArea(child: WerbeTestingPage()))));
-            },
-            child: Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: const Center(
-                child: Text("Werbung Testen"),
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

@@ -3,14 +3,13 @@ import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart'
 import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/preinstalled_levels_worker.dart';
 import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
-import 'Worker/firebase_storage_worker.dart';
 
-class LevelManager extends ChangeNotifier {
+class LevelManagerProvider extends ChangeNotifier {
   late List<LevelMetaType> levelMetaData;
 
-  static late LevelManager instance;
+  static late LevelManagerProvider instance;
 
-  LevelManager() {
+  LevelManagerProvider() {
     instance = this;
   }
 

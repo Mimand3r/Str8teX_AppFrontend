@@ -4,7 +4,7 @@ import 'package:str8tex_frontend/Board/board_keyboard.dart';
 import 'package:str8tex_frontend/Board/board.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import 'package:str8tex_frontend/Board/board_winning_page.dart';
-import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
+import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
 
 class BoardPage extends StatefulWidget {
   final String levelName;
@@ -20,7 +20,7 @@ class _BoardPageState extends State<BoardPage> {
   void initState() {
     super.initState();
     context
-        .read<LevelManager>()
+        .read<LevelManagerProvider>()
         .loadLevelData(widget.levelName)
         .then((databaseData) {
       context.read<BoardStateProvider>().loadBoard(databaseData).then((_) {

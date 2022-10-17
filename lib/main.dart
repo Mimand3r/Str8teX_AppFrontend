@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
-import 'package:str8tex_frontend/LevelManagement/level_manager.dart';
+import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
 import 'package:str8tex_frontend/firebase_options.dart';
 import 'package:str8tex_frontend/main_menu.dart';
 
@@ -22,7 +22,7 @@ void main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => BoardStateProvider()),
-          ChangeNotifierProvider(create: (context) => LevelManager()),
+          ChangeNotifierProvider(create: (context) => LevelManagerProvider()),
         ],
         child: const MyApp(),
       ),
@@ -59,13 +59,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: context.read<LevelManager>().initializeLevels(),
+        future: context.read<LevelManagerProvider>().initializeLevels(),
         builder: (b, s) {
           if (s.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (s.hasError) return Center(child: Text('Error: ${s.error}'));
-            return const Scaffold(body: SafeArea(child: MainMenu()));
+            return const MainMenu();
           }
         });
   }
