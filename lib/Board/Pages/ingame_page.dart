@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/Board/Pages/IngamePageHelpers/cell.dart';
+import 'package:str8tex_frontend/Board/Pages/IngamePageHelpers/BoardSmartCell.dart';
 
 class IngamePage extends StatefulWidget {
   final int size;
@@ -31,7 +31,7 @@ class _IngamePageState extends State<IngamePage> {
       shrinkWrap: true,
       children: List.generate(
         widget.size * widget.size,
-        (index) => Cell(
+        (index) => BoardSmartCell(
           cellSize: cellSize as double,
           index: index,
         ),

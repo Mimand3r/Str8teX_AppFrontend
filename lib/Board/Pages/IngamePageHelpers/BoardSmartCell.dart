@@ -7,18 +7,18 @@ import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import '../../Types/board_state_type.dart';
 
-class Cell extends StatefulWidget {
+class BoardSmartCell extends StatefulWidget {
   final double cellSize;
   final int index;
 
-  const Cell({Key? key, required this.cellSize, required this.index})
+  const BoardSmartCell({Key? key, required this.cellSize, required this.index})
       : super(key: key);
 
   @override
-  State<Cell> createState() => _CellState();
+  State<BoardSmartCell> createState() => _BoardSmartCellState();
 }
 
-class _CellState extends State<Cell> {
+class _BoardSmartCellState extends State<BoardSmartCell> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<BoardStateProvider>();
