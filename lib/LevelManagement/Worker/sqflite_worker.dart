@@ -61,20 +61,20 @@ class SQFLiteWorker {
 
   static Future writeClustersToDb(
       List<DatabaseClusterType> unstoredClusters) async {
-    await openedDatabase.transaction((txn) async {
-      for (var unstoredCluster in unstoredClusters) {
-        var emptyProgressBoard = BoardState.createFromJson(
-                unstoredLevel.emptyBoardData, unstoredLevel.size)
-            .serializeToString();
+    // await openedDatabase.transaction((txn) async {
+    //   for (var unstoredCluster in unstoredClusters) {
+    //     var emptyProgressBoard = BoardState.createFromJson(
+    //             unstoredLevel.emptyBoardData, unstoredLevel.size)
+    //         .serializeToString();
 
-        var id = await txn.rawInsert(
-            "INSERT INTO levels(level_name, empty_board, progress_board, solution_board, size, is_solved)"
-            "VALUES('${unstoredLevel.levelName}','${unstoredLevel.emptyBoardData}',"
-            "'$emptyProgressBoard', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
-            "0)");
-        debugPrint("New Element with ID $id inserted");
-      }
-    });
+    //     var id = await txn.rawInsert(
+    //         "INSERT INTO levels(level_name, empty_board, progress_board, solution_board, size, is_solved)"
+    //         "VALUES('${unstoredLevel.levelName}','${unstoredLevel.emptyBoardData}',"
+    //         "'$emptyProgressBoard', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
+    //         "0)");
+    //     debugPrint("New Element with ID $id inserted");
+    //   }
+    // });
   }
 
   static Future storeLevelsInDatabase(
