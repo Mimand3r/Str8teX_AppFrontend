@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
-import 'Types/board_state_type.dart';
+import '../../Types/board_state_type.dart';
 
 class Cell extends StatefulWidget {
   final double cellSize;

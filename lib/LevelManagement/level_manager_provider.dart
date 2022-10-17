@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
-import 'package:str8tex_frontend/LevelManagement/Worker/preinstalled_levels_worker.dart';
-import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
+import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/preinstalled_levels_worker.dart';
+import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/sqflite_worker.dart';
 
 class LevelManagerProvider extends ChangeNotifier {
   late List<LevelMetaType> levelMetaData;

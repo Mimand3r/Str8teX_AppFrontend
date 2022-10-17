@@ -1,18 +1,18 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/Board/cell.dart';
+import 'package:str8tex_frontend/Board/Pages/IngamePageHelpers/cell.dart';
 
-class Board extends StatefulWidget {
+class IngamePage extends StatefulWidget {
   final int size;
 
-  const Board({Key? key, this.size = 9}) : super(key: key);
+  const IngamePage({Key? key, this.size = 9}) : super(key: key);
 
   @override
-  State<Board> createState() => _BoardState();
+  State<IngamePage> createState() => _IngamePageState();
 }
 
-class _BoardState extends State<Board> {
+class _IngamePageState extends State<IngamePage> {
   @override
   void didChangeDependencies() {
     var deviceWidth = MediaQuery.of(context).size.width;

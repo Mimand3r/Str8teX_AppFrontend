@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/cluster_file_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
-import 'package:str8tex_frontend/LevelManagement/Worker/sqflite_worker.dart';
+import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/sqflite_worker.dart';
 
 class PreinstalledLevelWorker {
   static const String clusterFile = "level_cluster.json";

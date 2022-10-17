@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BoardWinningScreen extends StatefulWidget {
-  const BoardWinningScreen({Key? key}) : super(key: key);
+class WinningPage extends StatefulWidget {
+  const WinningPage({Key? key}) : super(key: key);
 
   @override
-  State<BoardWinningScreen> createState() => _BoardWinningScreenState();
+  State<WinningPage> createState() => _WinningPageState();
 }
 
-class _BoardWinningScreenState extends State<BoardWinningScreen> {
+class _WinningPageState extends State<WinningPage> {
   @override
   Widget build(BuildContext context) {
     return Center(

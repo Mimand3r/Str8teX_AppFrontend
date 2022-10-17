@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:str8tex_frontend/Board/board_keyboard.dart';
-import 'package:str8tex_frontend/Board/board.dart';
+import 'package:str8tex_frontend/Board/Pages/IngamePageHelpers/board_keyboard.dart';
+import 'package:str8tex_frontend/Board/Pages/ingame_page.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
-import 'package:str8tex_frontend/Board/board_winning_page.dart';
+import 'package:str8tex_frontend/Board/Pages/winning_page.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
+
+import 'Pages/IngamePageHelpers/board_keyboard.dart';
 
 class BoardPage extends StatefulWidget {
   final String levelName;
@@ -36,7 +38,7 @@ class _BoardPageState extends State<BoardPage> {
     var isSolved =
         context.select<BoardStateProvider, bool>((value) => value.isFinished);
 
-    if (isSolved) return const BoardWinningScreen();
+    if (isSolved) return const WinningPage();
 
     return Builder(
       builder: ((context) {
@@ -48,7 +50,7 @@ class _BoardPageState extends State<BoardPage> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Board(),
+              IngamePage(),
               BoardKeyboard(),
             ],
           );
