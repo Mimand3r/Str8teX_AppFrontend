@@ -1,16 +1,5 @@
-# str8tex_frontend
+# Sicherheits branch
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+bevor ich das Projekt pausiert hatte hatte ich bereits ansätze für firebase integration + advertising. diese waren aber unfinished. 
+Bei der Wiederaufnahme sollen die Features erstmal entfernt werden.
+In diesem Branch ist der alte state gespeichert.
