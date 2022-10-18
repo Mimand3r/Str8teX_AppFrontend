@@ -28,6 +28,7 @@ class LevelManagerProvider extends ChangeNotifier {
     await PreinstalledLevelWorker
         .storeInitialLevelsAndClustersIntoDatabaseIfNotExistant(
             clusterIds, levelNames);
+
     // Load Metadata for all internal Levels
     levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
   }

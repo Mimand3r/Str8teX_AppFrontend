@@ -104,7 +104,6 @@ class SQFLiteWorker {
   static Future<List<MetaDataType>> fetchMetaDataForAllStoredLevels() async {
     var query = await openedDatabase.rawQuery(
         'SELECT level_identifier, level_display_name, size, status, time FROM levels');
-
     List<MetaDataType> metaListe = [];
 
     for (var el in query) {
@@ -112,9 +111,9 @@ class SQFLiteWorker {
           levelIdentifier: el["level_identifier"] as String,
           levelDisplayName: el["level_display_name"] as String,
           size: el["size"] as int,
-          status: (["status"] as int) == 0
+          status: (el["status"] as int) == 0
               ? Status.unstarted
-              : (["status"] as int) == 1
+              : (el["status"] as int) == 1
                   ? Status.inProgress
                   : Status.finished,
           time: el["time"] as int);
