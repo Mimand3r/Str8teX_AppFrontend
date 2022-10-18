@@ -91,15 +91,10 @@ class SQFLiteWorker {
         var serializedProgressBoard = BoardState.createFromJson(
                 unstoredLevel.emptyBoardData, unstoredLevel.size)
             .serializeToString();
-        // var id = await txn.rawInsert(
-        //     "INSERT INTO levels(level_identifier, level_display_name, empty_board, progress_board, solution_board, size, status, time, cluster_id)"
-        //     "VALUES('${unstoredLevel.levelIdentifier}', '${unstoredLevel.levelDisplayName}','${unstoredLevel.emptyBoardData}'"
-        //     "'$serializedProgressBoard', '${unstoredLevel.solvedBoardData}', '${unstoredLevel.size}', '0', '0'"
-        //     "${unstoredLevel.clusterId})");
         var id = await txn.rawInsert(
             "INSERT INTO levels(level_identifier, level_display_name, empty_board, progress_board, solution_board, size, status, time, cluster_id)"
-            "VALUES('${unstoredLevel.levelIdentifier}','${unstoredLevel.levelDisplayName}','test',"
-            "'test','test','${unstoredLevel.size}','0','0',"
+            "VALUES('${unstoredLevel.levelIdentifier}', '${unstoredLevel.levelDisplayName}','${unstoredLevel.emptyBoardData}',"
+            "'$serializedProgressBoard', '${unstoredLevel.solvedBoardData}', '${unstoredLevel.size}', '0', '0',"
             "${unstoredLevel.clusterId})");
         debugPrint("New Level-Element with ID $id inserted");
       }
