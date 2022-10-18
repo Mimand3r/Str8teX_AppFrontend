@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
 import 'package:str8tex_frontend/main_menu.dart';
+import 'package:str8tex_frontend/startup_loading_module.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,8 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future:
-            context.read<LevelManagerProvider>().initializeDatabaseOnAppstart(),
+        future: StartupLoadingModule.loadAllModules(context),
         builder: (b, s) {
           if (s.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
