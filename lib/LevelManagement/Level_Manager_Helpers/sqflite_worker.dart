@@ -142,28 +142,28 @@ class SQFLiteWorker {
   static Future writeNewTimeProgressToDatabase(
       String levelName, int newTime) async {
     await openedDatabase.rawUpdate(
-        "UPDATE levels SET time = ?, status = 1 WHERE level_name = '$levelName'",
+        "UPDATE levels SET time = ?, status = 1 WHERE level_identifier = '$levelName'",
         [newTime]);
   }
 
   static Future writeNewBoardProgressToDatabase(
       String levelName, BoardState newBoardState, int newTime) async {
     await openedDatabase.rawUpdate(
-        "UPDATE levels SET progress_board = ?, time = ?, status = 1 WHERE level_name = '$levelName'",
+        "UPDATE levels SET progress_board = ?, time = ?, status = 1 WHERE level_identifier = '$levelName'",
         [newBoardState.serializeToString(), newTime]);
   }
 
   static Future writeLevelFinishedToDatabase(
       String levelName, int newTime) async {
     await openedDatabase.rawUpdate(
-        "UPDATE levels SET time = ?, status = 2 WHERE level_name = '$levelName'",
+        "UPDATE levels SET time = ?, status = 2 WHERE level_identifier = '$levelName'",
         [newTime]);
   }
 
   static Future resetLevelInDatabase(
       String levelName, BoardState emptyBoard) async {
     await openedDatabase.rawUpdate(
-        "UPDATE levels SET status = 0, time = 0, progress_board = ? WHERE level_name = '$levelName'",
+        "UPDATE levels SET status = 0, time = 0, progress_board = ? WHERE level_identifier = '$levelName'",
         [emptyBoard.serializeToString()]);
   }
 }
