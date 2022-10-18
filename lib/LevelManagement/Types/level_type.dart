@@ -1,4 +1,4 @@
-class DatabaseLevelType {
+class LevelType {
   late String levelIdentifier;
   late String levelDisplayName;
   late String emptyBoardData;

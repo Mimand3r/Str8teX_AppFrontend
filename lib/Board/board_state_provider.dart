@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/sqflite_worker.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
 import 'Types/board_state_type.dart';
@@ -18,7 +18,7 @@ class BoardStateProvider extends ChangeNotifier {
   late BoardState emptyBoard;
   late BoardState solutionBoard;
 
-  Future loadBoard(DatabaseLevelType databaseData) async {
+  Future loadBoard(LevelType databaseData) async {
     var newBoardState =
         BoardState.deserializeFromString(databaseData.progressBoardData);
 

@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:str8tex_frontend/Board/Types/board_state_type.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
-import '../Types/database_level_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/cluster_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/meta_data_type.dart';
+import '../Types/level_type.dart';
 
 class SQFLiteWorker {
   static late Database openedDatabase;
@@ -71,8 +72,18 @@ class SQFLiteWorker {
     return [clusterList, levelList];
   }
 
-  static Future storeLevelsInDatabase(
-      List<DatabaseLevelType> unstoredLevels) async {
+  static Future storeClustersInDatabase(
+      List<ClusterType> unstoredClusters) async {
+    await openedDatabase.transaction((txn) async {
+      for (var unstoredCluster in unstoredClusters) {
+        var id = await txn.rawInsert("INSERT INTO levels(id, name)"
+            "VALUES('${unstoredCluster.index}', '${unstoredCluster.name}'");
+        debugPrint("New Cluster Element with ID $id inserted");
+      }
+    });
+  }
+
+  static Future storeLevelsInDatabase(List<LevelType> unstoredLevels) async {
     await openedDatabase.transaction((txn) async {
       for (var unstoredLevel in unstoredLevels) {
         // create and serialize emptyBoardState-object. This is stored in ProgressData
@@ -90,14 +101,14 @@ class SQFLiteWorker {
     });
   }
 
-  static Future<List<LevelMetaType>> fetchMetaDataForAllStoredLevels() async {
+  static Future<List<MetaDataType>> fetchMetaDataForAllStoredLevels() async {
     var query = await openedDatabase.rawQuery(
         'SELECT level_identifier, level_display_name, size, status, time FROM levels');
 
-    List<LevelMetaType> metaListe = [];
+    List<MetaDataType> metaListe = [];
 
     for (var el in query) {
-      var newElement = LevelMetaType(
+      var newElement = MetaDataType(
           levelIdentifier: el["level_identifier"] as String,
           levelDisplayName: el["level_display_name"] as String,
           size: el["size"] as int,
@@ -113,11 +124,11 @@ class SQFLiteWorker {
     return metaListe;
   }
 
-  static Future<DatabaseLevelType> fetchFullStoredLevelDataForSpecificLevel(
+  static Future<LevelType> fetchFullStoredLevelDataForSpecificLevel(
       String level_identifier) async {
     var query = await openedDatabase.rawQuery(
         "SELECT * FROM levels WHERE level_identifier = '$level_identifier'");
-    return DatabaseLevelType()
+    return LevelType()
       ..levelIdentifier = query.first["level_identifier"] as String
       ..levelDisplayName = query.first["level_display_name"] as String
       ..emptyBoardData = query.first["empty_board"] as String

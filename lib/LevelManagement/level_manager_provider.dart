@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/level_type.dart';
+import 'package:str8tex_frontend/LevelManagement/Types/meta_data_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/preinstalled_levels_worker.dart';
 import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/sqflite_worker.dart';
 
 class LevelManagerProvider extends ChangeNotifier {
-  late List<LevelMetaType> levelMetaData;
+  late List<MetaDataType> levelMetaData;
 
   static late LevelManagerProvider instance;
 
@@ -13,6 +13,8 @@ class LevelManagerProvider extends ChangeNotifier {
     instance = this;
   }
 
+  // Diese Methode muss bei jedem App Start durchlaufen werden.
+  //Sie wird vom StartupLoading Module gemanaged
   Future initializeDatabaseOnAppstart() async {
     // Open or Create new DB
     await SQFLiteWorker.openDatabaseForAppSession();
@@ -29,7 +31,7 @@ class LevelManagerProvider extends ChangeNotifier {
     levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
   }
 
-  Future<DatabaseLevelType> loadSpecificLevelData(String levelName) async {
+  Future<LevelType> loadSpecificLevelData(String levelName) async {
     var data =
         await SQFLiteWorker.fetchFullStoredLevelDataForSpecificLevel(levelName);
     return data;
