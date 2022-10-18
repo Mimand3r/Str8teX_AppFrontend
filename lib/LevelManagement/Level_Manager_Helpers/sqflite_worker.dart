@@ -27,8 +27,8 @@ class SQFLiteWorker {
   }
 
   static Future createDatabaseTablesIfNotExistant() async {
-    await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
-    await openedDatabase.execute("DROP TABLE IF EXISTS clusters"); // Dev only
+    // await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
+    // await openedDatabase.execute("DROP TABLE IF EXISTS clusters"); // Dev only
     // Table 1: Clusters
     await openedDatabase.execute("CREATE TABLE IF NOT EXISTS clusters ("
         "id INTEGER PRIMARY KEY,"
@@ -75,6 +75,7 @@ class SQFLiteWorker {
 
   static Future storeClustersInDatabase(
       List<ClusterType> unstoredClusters) async {
+    if (unstoredClusters.isEmpty) return;
     await openedDatabase.transaction((txn) async {
       for (var unstoredCluster in unstoredClusters) {
         var id = await txn.rawInsert("INSERT INTO clusters(id, name)"

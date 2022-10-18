@@ -20,16 +20,15 @@ class PreinstalledLevelWorker {
       previousValue.addAll(element.level);
       return previousValue;
     });
-
     // Finde raus welche Daten in DB fehlen
     var missingLevelNames = definedLevels
-        .where((element) => !currentDatabaseLevels.contains(element))
+        .where(
+            (element) => !currentDatabaseLevels.contains(element.split('.')[0]))
         .toList();
 
     var missingClusterIDs = definedIDs
         .where((element) => !currentClusterIds.contains(element))
         .toList();
-
     // Erzeuge zuerst missing Clusters
     List<ClusterType> missingClustersData = [];
     for (var missingClusterID in missingClusterIDs) {
@@ -40,7 +39,6 @@ class PreinstalledLevelWorker {
     var update1 = SQFLiteWorker.storeClustersInDatabase(
         missingClustersData); // Pass Data to SQFlite Worker so that new Entrys can be added
 
-    await update1;
     // Erzeuge Nun Missing Levels
     List<LevelType> missingLevelsData = [];
 
