@@ -104,6 +104,7 @@ class SQFLiteWorker {
   static Future<List<MetaDataType>> fetchMetaDataForAllStoredLevels() async {
     var query = await openedDatabase.rawQuery(
         'SELECT level_identifier, level_display_name, size, status, time FROM levels');
+    debugPrint("Fetched All Meta Data from db. ${query.length} Elements");
     List<MetaDataType> metaListe = [];
 
     for (var el in query) {
@@ -127,6 +128,7 @@ class SQFLiteWorker {
       String level_identifier) async {
     var query = await openedDatabase.rawQuery(
         "SELECT * FROM levels WHERE level_identifier = '$level_identifier'");
+    debugPrint("Fetched Detail Data for Lvl $level_identifier");
     return LevelType()
       ..levelIdentifier = query.first["level_identifier"] as String
       ..levelDisplayName = query.first["level_display_name"] as String
@@ -144,6 +146,7 @@ class SQFLiteWorker {
     await openedDatabase.rawUpdate(
         "UPDATE levels SET time = ?, status = 1 WHERE level_identifier = '$levelName'",
         [newTime]);
+    debugPrint("Made Progress Write to DB - Reason: Time - $newTime seconds");
   }
 
   static Future writeNewBoardProgressToDatabase(
@@ -151,6 +154,7 @@ class SQFLiteWorker {
     await openedDatabase.rawUpdate(
         "UPDATE levels SET progress_board = ?, time = ?, status = 1 WHERE level_identifier = '$levelName'",
         [newBoardState.serializeToString(), newTime]);
+    debugPrint("Made Progress Write to DB - Reason: StateChange");
   }
 
   static Future writeLevelFinishedToDatabase(
@@ -158,6 +162,7 @@ class SQFLiteWorker {
     await openedDatabase.rawUpdate(
         "UPDATE levels SET time = ?, status = 2 WHERE level_identifier = '$levelName'",
         [newTime]);
+    debugPrint("Level $levelName changed to Finished in DB");
   }
 
   static Future resetLevelInDatabase(
@@ -165,5 +170,6 @@ class SQFLiteWorker {
     await openedDatabase.rawUpdate(
         "UPDATE levels SET status = 0, time = 0, progress_board = ? WHERE level_identifier = '$levelName'",
         [emptyBoard.serializeToString()]);
+    debugPrint("Level $levelName got reset");
   }
 }
