@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../LevelManagement/Types/meta_data_type.dart';
+
 class RestartPage extends StatefulWidget {
-  const RestartPage({Key? key}) : super(key: key);
+  const RestartPage({Key? key, required this.metaData}) : super(key: key);
+  final MetaDataType metaData;
 
   @override
   State<RestartPage> createState() => _RestartPageState();

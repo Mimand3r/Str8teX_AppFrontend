@@ -45,9 +45,8 @@ class PreinstalledLevelWorker {
 
     for (var i = 0; i < missingLevelNames.length; i++) {
       // Für jedes Level parse das korrekte Dokument und lese daten aus
-      final jsonText = await rootBundle
+      final rawData = await rootBundle
           .loadString('assets/${missingLevelNames[i]}', cache: false);
-      final data = json.decode(jsonText);
 
       // Ein Level-JSON Dokument hat folgende struktur:
       // {
@@ -58,14 +57,8 @@ class PreinstalledLevelWorker {
       //    SolutionBoard: [List of cells with type & value]
       // }
 
-      final newDataPiece = LevelType()
-        ..levelIdentifier = data["levelIdentifier"]
-        ..levelDisplayName = data["levelDisplayName"]
-        ..emptyBoardData = json.encode(data["EmptyBoard"])
-        ..solvedBoardData = json.encode(data["SolutionBoard"])
-        ..clusterId = missingClusterIDs[i]
-        ..time = 0
-        ..size = data["size"];
+      final newDataPiece =
+          LevelType.fromLevelFile(rawData, missingClusterIDs[i]);
 
       missingLevelsData.add(newDataPiece);
     }

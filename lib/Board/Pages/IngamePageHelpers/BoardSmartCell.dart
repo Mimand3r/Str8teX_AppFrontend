@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/Board/board_state_provider.dart';
@@ -11,8 +10,11 @@ class BoardSmartCell extends StatefulWidget {
   final double cellSize;
   final int index;
 
-  const BoardSmartCell({Key? key, required this.cellSize, required this.index})
-      : super(key: key);
+  const BoardSmartCell({
+    Key? key,
+    required this.cellSize,
+    required this.index,
+  }) : super(key: key);
 
   @override
   State<BoardSmartCell> createState() => _BoardSmartCellState();

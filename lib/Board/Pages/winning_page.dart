@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../LevelManagement/Types/meta_data_type.dart';
+
 class WinningPage extends StatefulWidget {
-  const WinningPage({Key? key}) : super(key: key);
+  const WinningPage({Key? key, required this.metaData}) : super(key: key);
+  final MetaDataType metaData;
 
   @override
   State<WinningPage> createState() => _WinningPageState();

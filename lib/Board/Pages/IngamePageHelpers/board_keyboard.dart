@@ -32,10 +32,12 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
               padding: const EdgeInsets.only(top: 5.0),
               child: GestureDetector(
                 onTap: () {
-                  context.read<BoardStateProvider>().toggleHelperValue(e);
+                  context
+                      .read<BoardStateProvider>()
+                      .toggleHelperValue(e, context);
                 },
                 onLongPress: () {
-                  context.read<BoardStateProvider>().toggleValue(e);
+                  context.read<BoardStateProvider>().toggleValue(e, context);
                 },
                 child: Container(
                   width: cellSize,
@@ -64,7 +66,7 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
           children: [
             GestureDetector(
               onTap: () {
-                context.read<BoardStateProvider>().undo();
+                context.read<BoardStateProvider>().undo(context);
               },
               child: Container(
                 width: 100,
@@ -90,7 +92,7 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
             ),
             GestureDetector(
               onTap: () {
-                context.read<BoardStateProvider>().clearActiveCell();
+                context.read<BoardStateProvider>().clearActiveCell(context);
               },
               child: Container(
                 width: 100,
@@ -112,7 +114,7 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
             ),
             GestureDetector(
               onTap: () {
-                context.read<BoardStateProvider>().redo();
+                context.read<BoardStateProvider>().redo(context);
               },
               child: Container(
                 width: 100,
@@ -141,7 +143,7 @@ class _BoardKeyboardState extends State<BoardKeyboard> {
         Center(
           child: GestureDetector(
             onTap: () {
-              context.read<BoardStateProvider>().restartLevel();
+              context.read<BoardStateProvider>().restartLevel(context);
             },
             child: Container(
               width: 100,

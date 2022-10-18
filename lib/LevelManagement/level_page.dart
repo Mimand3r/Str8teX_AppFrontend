@@ -50,7 +50,7 @@ class _LevelPageState extends State<LevelPage> {
                                     Text("Size: ${e.size}", style: smallText()),
                                     const SizedBox(width: 5),
                                     Text(
-                                      "IsSolved: ${e.isSolved.toString()}",
+                                      "IsSolved: ${e.status}",
                                       style: smallText(),
                                     )
                                   ],

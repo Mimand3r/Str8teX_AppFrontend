@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/level_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/sqflite_worker.dart';
 import 'package:str8tex_frontend/LevelManagement/level_manager_provider.dart';
@@ -18,9 +21,13 @@ class BoardStateProvider extends ChangeNotifier {
   late BoardState emptyBoard;
   late BoardState solutionBoard;
 
-  Future loadBoard(LevelType databaseData) async {
-    var newBoardState =
-        BoardState.deserializeFromString(databaseData.progressBoardData);
+  // Time System
+  int time = 0;
+  int lastTimeUpdate = 0;
+  late Timer timer;
+
+  Future loadBoard(LevelType databaseData, BuildContext context) async {
+    var newBoardState = databaseData.progressBoardDataObject;
 
     // Select First standard Cell
     var firstNormalElement = newBoardState.cells
@@ -32,7 +39,7 @@ class BoardStateProvider extends ChangeNotifier {
     undoCounter = 0;
     rememberedState = null;
 
-    currentLevelName = databaseData.levelName;
+    currentLevelName = databaseData.levelIdentifier;
     emptyBoard = BoardState.createFromJson(
         databaseData.emptyBoardData, databaseData.size);
     solutionBoard = BoardState.createFromJson(
@@ -40,10 +47,24 @@ class BoardStateProvider extends ChangeNotifier {
 
     isFinished = false;
 
+    // Set Timer
+    time = databaseData.time;
+    lastTimeUpdate = databaseData.time;
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      time += 1;
+      if (time - lastTimeUpdate > 10) {
+        context
+            .read<LevelManagerProvider>()
+            .writeNewProgressDataToDatabase(databaseData.levelIdentifier, time);
+        lastTimeUpdate = time;
+      }
+      notifyListeners();
+    });
+
     notifyListeners();
   }
 
-  void restartLevel() {
+  void restartLevel(BuildContext context) {
     var newBoardState = emptyBoard;
 
     // Select First standard Cell
@@ -57,8 +78,9 @@ class BoardStateProvider extends ChangeNotifier {
     rememberedState = null;
 
     notifyListeners();
-    SQFLiteWorker.writeNewProgressToDatabase(
-        currentLevelName, currentBoardState);
+    context
+        .read<LevelManagerProvider>()
+        .writeLevelGotRestartedToDB(currentLevelName);
   }
 
   void selectNewCell(int index) {
@@ -73,7 +95,7 @@ class BoardStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleValue(int pressedValue) {
+  void toggleValue(int pressedValue, BuildContext context) {
     _updateHistory();
     var activeCell =
         currentBoardState.cells.firstWhere((element) => element.isSelected);
@@ -81,16 +103,19 @@ class BoardStateProvider extends ChangeNotifier {
     if (activeCell.value != pressedValue) {
       activeCell.value = pressedValue;
       activeCell.helperValues = [];
-      _checkForGameEnd();
+      _checkForGameEnd(context);
     } else {
       activeCell.value = 0;
     }
     notifyListeners();
-    SQFLiteWorker.writeNewProgressToDatabase(
-        currentLevelName, currentBoardState);
+    context.read<LevelManagerProvider>().writeNewProgressDataToDatabase(
+          currentLevelName,
+          time,
+          newState: currentBoardState,
+        );
   }
 
-  _checkForGameEnd() {
+  _checkForGameEnd(BuildContext context) {
     if (currentBoardState.cells.any((element) =>
         element.cellType == CellType.standard && element.value == 0)) return;
 
@@ -108,11 +133,12 @@ class BoardStateProvider extends ChangeNotifier {
     }
 
     if (solutionValid) isFinished = true;
-    SQFLiteWorker.resetLevelInDatabase(currentLevelName, emptyBoard);
-    LevelManagerProvider.instance.changeMetaDataToSolved(currentLevelName);
+    context
+        .read<LevelManagerProvider>()
+        .writeLevelGotFinishedToDB(currentLevelName, time);
   }
 
-  void toggleHelperValue(int pressedValue) {
+  void toggleHelperValue(int pressedValue, BuildContext context) {
     var activeCell =
         currentBoardState.cells.firstWhere((element) => element.isSelected);
     if (activeCell.value > 0) return;
@@ -125,11 +151,14 @@ class BoardStateProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-    SQFLiteWorker.writeNewProgressToDatabase(
-        currentLevelName, currentBoardState);
+    context.read<LevelManagerProvider>().writeNewProgressDataToDatabase(
+          currentLevelName,
+          time,
+          newState: currentBoardState,
+        );
   }
 
-  void clearActiveCell() {
+  void clearActiveCell(BuildContext context) {
     _updateHistory();
     var activeCell =
         currentBoardState.cells.firstWhere((element) => element.isSelected);
@@ -138,11 +167,14 @@ class BoardStateProvider extends ChangeNotifier {
     activeCell.helperValues.clear();
 
     notifyListeners();
-    SQFLiteWorker.writeNewProgressToDatabase(
-        currentLevelName, currentBoardState);
+    context.read<LevelManagerProvider>().writeNewProgressDataToDatabase(
+          currentLevelName,
+          time,
+          newState: currentBoardState,
+        );
   }
 
-  void undo() {
+  void undo(BuildContext context) {
     if (undoCounter == 0) rememberedState = currentBoardState.makeCopy();
     undoCounter += 1;
     final currentElementHistoryIndex = history.length - undoCounter;
@@ -152,11 +184,14 @@ class BoardStateProvider extends ChangeNotifier {
     }
     currentBoardState = history[currentElementHistoryIndex].makeCopy();
     notifyListeners();
-    SQFLiteWorker.writeNewProgressToDatabase(
-        currentLevelName, currentBoardState);
+    context.read<LevelManagerProvider>().writeNewProgressDataToDatabase(
+          currentLevelName,
+          time,
+          newState: currentBoardState,
+        );
   }
 
-  void redo() {
+  void redo(BuildContext context) {
     if (undoCounter == 0) return;
     undoCounter -= 1;
     if (undoCounter == 0) {
@@ -168,8 +203,11 @@ class BoardStateProvider extends ChangeNotifier {
     final currentElementHistoryIndex = history.length - undoCounter;
     currentBoardState = history[currentElementHistoryIndex].makeCopy();
     notifyListeners();
-    SQFLiteWorker.writeNewProgressToDatabase(
-        currentLevelName, currentBoardState);
+    context.read<LevelManagerProvider>().writeNewProgressDataToDatabase(
+          currentLevelName,
+          time,
+          newState: currentBoardState,
+        );
   }
 
   void _updateHistory() {
