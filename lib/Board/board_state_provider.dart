@@ -57,7 +57,8 @@ class BoardStateProvider extends ChangeNotifier {
     rememberedState = null;
 
     notifyListeners();
-    SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+    SQFLiteWorker.writeNewProgressToDatabase(
+        currentLevelName, currentBoardState);
   }
 
   void selectNewCell(int index) {
@@ -85,7 +86,8 @@ class BoardStateProvider extends ChangeNotifier {
       activeCell.value = 0;
     }
     notifyListeners();
-    SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+    SQFLiteWorker.writeNewProgressToDatabase(
+        currentLevelName, currentBoardState);
   }
 
   _checkForGameEnd() {
@@ -106,8 +108,7 @@ class BoardStateProvider extends ChangeNotifier {
     }
 
     if (solutionValid) isFinished = true;
-    SQFLiteWorker.writeIsSolvedToDatabaseAndResetProgress(
-        currentLevelName, emptyBoard);
+    SQFLiteWorker.resetLevelInDatabase(currentLevelName, emptyBoard);
     LevelManagerProvider.instance.changeMetaDataToSolved(currentLevelName);
   }
 
@@ -124,7 +125,8 @@ class BoardStateProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-    SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+    SQFLiteWorker.writeNewProgressToDatabase(
+        currentLevelName, currentBoardState);
   }
 
   void clearActiveCell() {
@@ -136,7 +138,8 @@ class BoardStateProvider extends ChangeNotifier {
     activeCell.helperValues.clear();
 
     notifyListeners();
-    SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+    SQFLiteWorker.writeNewProgressToDatabase(
+        currentLevelName, currentBoardState);
   }
 
   void undo() {
@@ -149,7 +152,8 @@ class BoardStateProvider extends ChangeNotifier {
     }
     currentBoardState = history[currentElementHistoryIndex].makeCopy();
     notifyListeners();
-    SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+    SQFLiteWorker.writeNewProgressToDatabase(
+        currentLevelName, currentBoardState);
   }
 
   void redo() {
@@ -164,7 +168,8 @@ class BoardStateProvider extends ChangeNotifier {
     final currentElementHistoryIndex = history.length - undoCounter;
     currentBoardState = history[currentElementHistoryIndex].makeCopy();
     notifyListeners();
-    SQFLiteWorker.writeProgressToDatabase(currentLevelName, currentBoardState);
+    SQFLiteWorker.writeNewProgressToDatabase(
+        currentLevelName, currentBoardState);
   }
 
   void _updateHistory() {

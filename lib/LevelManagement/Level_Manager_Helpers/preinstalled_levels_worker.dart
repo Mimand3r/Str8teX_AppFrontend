@@ -1,9 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/cluster_file_type.dart';
-import 'package:str8tex_frontend/LevelManagement/Types/database_level_type.dart';
-import 'package:str8tex_frontend/LevelManagement/Level_Manager_Helpers/sqflite_worker.dart';
 
 class PreinstalledLevelWorker {
   static const String clusterFile = "level_cluster.json";
@@ -23,7 +19,7 @@ class PreinstalledLevelWorker {
     // Finde raus welche Clusters und Levels laut asset Lists existieren müssten
     final clusterText =
         await rootBundle.loadString('assets/$clusterFile', cache: false);
-    final clusterData = ClusterFileType.fromStringList(clusterText);
+    final clusterData = ClusterFileType.fromClusterFile(clusterText);
 
     var definedIDs = clusterData.map((e) => e.index).toList();
     var definedLevels =

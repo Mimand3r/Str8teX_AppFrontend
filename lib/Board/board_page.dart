@@ -23,7 +23,7 @@ class _BoardPageState extends State<BoardPage> {
     super.initState();
     context
         .read<LevelManagerProvider>()
-        .loadLevelData(widget.levelName)
+        .loadSpecificLevelData(widget.levelName)
         .then((databaseData) {
       context.read<BoardStateProvider>().loadBoard(databaseData).then((_) {
         setState(() => wasLoaded = true);

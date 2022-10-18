@@ -51,7 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: context.read<LevelManagerProvider>().initializeLevels(),
+        future:
+            context.read<LevelManagerProvider>().initializeDatabaseOnAppstart(),
         builder: (b, s) {
           if (s.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

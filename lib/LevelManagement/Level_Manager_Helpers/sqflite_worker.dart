@@ -3,7 +3,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:str8tex_frontend/Board/Types/board_state_type.dart';
 import 'package:str8tex_frontend/LevelManagement/Types/level_meta_type.dart';
-import '../Types/database_cluster_type.dart';
 import '../Types/database_level_type.dart';
 
 class SQFLiteWorker {
@@ -27,7 +26,7 @@ class SQFLiteWorker {
   }
 
   static Future createDatabaseTablesIfNotExistant() async {
-    // await openedDatabase.execute("DROP TABLE IF EXISTS levels");
+    // await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
     // Table 1: Clusters
     await openedDatabase.execute("CREATE TABLE IF NOT EXISTS clusters ("
         "id INTEGER PRIMARY KEY,"
@@ -36,77 +35,78 @@ class SQFLiteWorker {
     // Table 2: Levels
     await openedDatabase.execute("CREATE TABLE IF NOT EXISTS levels ("
         "id INTEGER PRIMARY KEY,"
-        "level_name TEXT,"
+        "level_identifier TEXT,"
+        "level_display_name TEXT,"
         "empty_board TEXT,"
         "progress_board TEXT,"
         "solution_board TEXT,"
+        // Empty Board and SolutionBoard are type JSON
+        // They have the following structure:
+        // {
+        //    "size":9,
+        //    "cells":[
+        //      {"type":"standard","number":0}...
+        //    ]
+        //
+        // }
+        // Progress Board is serialized BoardState class
+
         "size INTEGER,"
-        "is_solved BOOLEAN," // 0 oder 1
+        "status INTEGER," // 0 = unstarted, 1 = inProgress, 2 = finished
+        "time INTEGER," // only relevant for finished and inProgress, Einheit: seconds
         "cluster_id INTEGER,"
         "FOREIGN KEY (cluster_id) REFERENCES clusters (id) ON DELETE NO ACTION ON UPDATE NO ACTION"
         ")");
   }
 
-  static Future<List> getAllStoredClusterIdsAndLevelNames() async {
+  static Future<List> getAllStoredDataIDsOrNames() async {
     var queryResultClusters =
         await openedDatabase.rawQuery('SELECT id FROM clusters');
     var clusterList = queryResultClusters.map((x) => x["id"] as int).toList();
     var queryResultLevels =
-        await openedDatabase.rawQuery('SELECT level_name FROM levels');
+        await openedDatabase.rawQuery('SELECT level_identifier FROM levels');
     var levelList =
-        queryResultLevels.map((x) => x["level_name"] as String).toList();
+        queryResultLevels.map((x) => x["level_identifier"] as String).toList();
 
     return [clusterList, levelList];
-  }
-
-  static Future writeClustersToDb(
-      List<DatabaseClusterType> unstoredClusters) async {
-    // await openedDatabase.transaction((txn) async {
-    //   for (var unstoredCluster in unstoredClusters) {
-    //     var emptyProgressBoard = BoardState.createFromJson(
-    //             unstoredLevel.emptyBoardData, unstoredLevel.size)
-    //         .serializeToString();
-
-    //     var id = await txn.rawInsert(
-    //         "INSERT INTO levels(level_name, empty_board, progress_board, solution_board, size, is_solved)"
-    //         "VALUES('${unstoredLevel.levelName}','${unstoredLevel.emptyBoardData}',"
-    //         "'$emptyProgressBoard', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
-    //         "0)");
-    //     debugPrint("New Element with ID $id inserted");
-    //   }
-    // });
   }
 
   static Future storeLevelsInDatabase(
       List<DatabaseLevelType> unstoredLevels) async {
     await openedDatabase.transaction((txn) async {
       for (var unstoredLevel in unstoredLevels) {
-        var emptyProgressBoard = BoardState.createFromJson(
+        // create and serialize emptyBoardState-object. This is stored in ProgressData
+        var serializedBoard = BoardState.createFromJson(
                 unstoredLevel.emptyBoardData, unstoredLevel.size)
             .serializeToString();
 
         var id = await txn.rawInsert(
-            "INSERT INTO levels(level_name, empty_board, progress_board, solution_board, size, is_solved)"
-            "VALUES('${unstoredLevel.levelName}','${unstoredLevel.emptyBoardData}',"
-            "'$emptyProgressBoard', '${unstoredLevel.solvedBoardData}', ${unstoredLevel.size},"
-            "0)");
+            "INSERT INTO levels(level_identifier, level_display_name, empty_board, progress_board, solution_board, size, status, time, cluster_id)"
+            "VALUES('${unstoredLevel.levelIdentifier}', '${unstoredLevel.levelDisplayName}','${unstoredLevel.emptyBoardData}',"
+            "'$serializedBoard', '${unstoredLevel.solvedBoardData}', '${unstoredLevel.size}', '0', '0'"
+            "${unstoredLevel.clusterId})");
         debugPrint("New Element with ID $id inserted");
       }
     });
   }
 
   static Future<List<LevelMetaType>> fetchMetaDataForAllStoredLevels() async {
-    var query = await openedDatabase
-        .rawQuery('SELECT level_name, size, is_solved FROM levels');
+    var query = await openedDatabase.rawQuery(
+        'SELECT level_identifier, level_display_name, size, status, time FROM levels');
 
     List<LevelMetaType> metaListe = [];
 
     for (var el in query) {
       var newElement = LevelMetaType(
-        levelName: el["level_name"] as String,
-        isSolved: el["is_solved"] != 0,
-        size: el["size"] as int,
-      );
+          levelIdentifier: el["level_identifier"] as String,
+          levelDisplayName: el["level_display_name"] as String,
+          size: el["size"] as int,
+          status: (["status"] as int) == 0
+              ? Status.unstarted
+              : (["status"] as int) == 1
+                  ? Status.inProgress
+                  : Status.finished,
+          time: el["time"] as int);
       metaListe.add(newElement);
     }
 
@@ -114,30 +114,46 @@ class SQFLiteWorker {
   }
 
   static Future<DatabaseLevelType> fetchFullStoredLevelDataForSpecificLevel(
-      String levelName) async {
-    var query = await openedDatabase
-        .rawQuery("SELECT * FROM levels WHERE level_name = '$levelName'");
+      String level_identifier) async {
+    var query = await openedDatabase.rawQuery(
+        "SELECT * FROM levels WHERE level_identifier = '$level_identifier'");
     return DatabaseLevelType()
-      ..levelName = query.first["level_name"] as String
+      ..levelIdentifier = query.first["level_identifier"] as String
+      ..levelDisplayName = query.first["level_display_name"] as String
       ..emptyBoardData = query.first["empty_board"] as String
       ..progressBoardData = query.first["progress_board"] as String
       ..solvedBoardData = query.first["solution_board"] as String
-      ..size = query.first["size"] as int;
+      ..size = query.first["size"] as int
+      ..time = query.first["time"] as int
+      ..clusterId = query.first["cluster_id"] as int;
+    // TODO how to get foreign key name = clusterName
   }
 
-  static Future writeProgressToDatabase(
-      String levelName, BoardState boardState) async {
+  static Future writeNewTimeProgressToDatabase(
+      String levelName, int newTime) async {
     await openedDatabase.rawUpdate(
-        "UPDATE levels SET progress_board = ? WHERE level_name = '$levelName'",
-        [boardState.serializeToString()]);
+        "UPDATE levels SET time = ?, status = 1 WHERE level_name = '$levelName'",
+        [newTime]);
   }
 
-  static Future writeIsSolvedToDatabaseAndResetProgress(
+  static Future writeNewBoardProgressToDatabase(
+      String levelName, BoardState newBoardState, int newTime) async {
+    await openedDatabase.rawUpdate(
+        "UPDATE levels SET progress_board = ?, time = ?, status = 1 WHERE level_name = '$levelName'",
+        [newBoardState.serializeToString(), newTime]);
+  }
+
+  static Future writeLevelFinishedToDatabase(
+      String levelName, int newTime) async {
+    await openedDatabase.rawUpdate(
+        "UPDATE levels SET time = ?, status = 2 WHERE level_name = '$levelName'",
+        [newTime]);
+  }
+
+  static Future resetLevelInDatabase(
       String levelName, BoardState emptyBoard) async {
     await openedDatabase.rawUpdate(
-        "UPDATE levels SET is_solved = 1 WHERE level_name = '$levelName'");
-    await openedDatabase.rawUpdate(
-        "UPDATE levels SET progress_board = ? WHERE level_name = '$levelName'",
+        "UPDATE levels SET status = 0, time = 0, progress_board = ? WHERE level_name = '$levelName'",
         [emptyBoard.serializeToString()]);
   }
 }

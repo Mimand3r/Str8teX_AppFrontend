@@ -27,7 +27,7 @@ class _LevelPageState extends State<LevelPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Scaffold(
-                              body: BoardPage(levelName: e.levelName),
+                              body: BoardPage(levelName: e.levelIdentifier),
                             ),
                           ),
                         );
@@ -41,7 +41,7 @@ class _LevelPageState extends State<LevelPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  e.levelName,
+                                  e.levelIdentifier,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),

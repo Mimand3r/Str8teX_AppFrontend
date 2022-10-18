@@ -5,7 +5,7 @@ class ClusterFileType {
   late String name;
   late List<String> level;
 
-  static List<ClusterFileType> fromStringList(String rawStringList) {
+  static List<ClusterFileType> fromClusterFile(String rawStringList) {
     var map = json.decode(rawStringList) as List<dynamic>;
     var newObjects = map
         .map((x) => ClusterFileType()

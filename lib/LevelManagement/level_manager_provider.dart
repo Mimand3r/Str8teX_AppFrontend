@@ -13,29 +13,23 @@ class LevelManagerProvider extends ChangeNotifier {
     instance = this;
   }
 
-  Future initializeLevels() async {
-    // Update internal Level Data for preinstalled Levels
+  Future initializeDatabaseOnAppstart() async {
+    // Open or Create new DB
     await SQFLiteWorker.openDatabaseForAppSession();
     await SQFLiteWorker.createDatabaseTablesIfNotExistant();
     final clusterIdsAndLevelNames =
-        await SQFLiteWorker.getAllStoredClusterIdsAndLevelNames();
+        await SQFLiteWorker.getAllStoredDataIDsOrNames();
     final clusterIds = clusterIdsAndLevelNames[0] as List<int>;
     final levelNames = clusterIdsAndLevelNames[1] as List<String>;
     await PreinstalledLevelWorker
         .storeInitialLevelsAndClustersIntoDatabaseIfNotExistant(
             clusterIds, levelNames);
 
-    // // Update internal Level Data for Firebase Levels
-    // var firebaseLevelNames =
-    //     await FirebaseStorageWorker.fetchLevelNamesFromFirebase();
-    // await FirebaseStorageWorker.downloadAndStoreMissingLevels(
-    //     firebaseLevelNames, storedLevels);
-
-    // // Load Metadata for all internal Levels
-    // levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
+    // Load Metadata for all internal Levels
+    levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
   }
 
-  Future<DatabaseLevelType> loadLevelData(String levelName) async {
+  Future<DatabaseLevelType> loadSpecificLevelData(String levelName) async {
     var data =
         await SQFLiteWorker.fetchFullStoredLevelDataForSpecificLevel(levelName);
     return data;
@@ -44,7 +38,7 @@ class LevelManagerProvider extends ChangeNotifier {
   void changeMetaDataToSolved(String levelName) {
     debugPrint("got executed");
     levelMetaData
-        .firstWhere((element) => element.levelName == levelName)
+        .firstWhere((element) => element.levelIdentifier == levelName)
         .isSolved = true;
     notifyListeners();
   }
