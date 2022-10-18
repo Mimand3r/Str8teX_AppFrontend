@@ -27,7 +27,6 @@ class BoardStateProvider extends ChangeNotifier {
   late Timer timer;
 
   Future loadBoard(LevelType databaseData, BuildContext context) async {
-
     currentBoardState = databaseData.progressBoardDataObject;
     // Select First standard Cell
     var firstNormalElement = currentBoardState.cells

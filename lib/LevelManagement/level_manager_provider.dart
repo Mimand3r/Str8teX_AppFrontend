@@ -38,8 +38,7 @@ class LevelManagerProvider extends ChangeNotifier {
         await SQFLiteWorker.fetchFullStoredLevelDataForSpecificLevel(levelName);
 
     data.progressBoardDataObject =
-        BoardState.createFromJson(data.progressBoardData, data.size);
-
+        BoardState.deserializeFromString(data.progressBoardData);
     return data;
   }
 
