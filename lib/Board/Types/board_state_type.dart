@@ -11,7 +11,8 @@ class BoardState {
 
   static BoardState createFromJson(String json, int size) {
     var newBoardState = BoardState()..size = size;
-    List<dynamic> cellList = jsonDecode(json);
+    dynamic obj = jsonDecode(json);
+    List<dynamic> cellList = obj["cells"];
     var indexCounter = 0;
     for (var cellListElement in cellList) {
       var newCell = BoardStateCell();

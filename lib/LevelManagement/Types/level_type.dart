@@ -24,7 +24,6 @@ class LevelType {
       ..clusterId = clusterID
       ..time = 0
       ..size = data["size"];
-
     return newDataPiece;
   }
 }

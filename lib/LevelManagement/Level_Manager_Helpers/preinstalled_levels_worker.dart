@@ -40,8 +40,16 @@ class PreinstalledLevelWorker {
     var update1 = SQFLiteWorker.storeClustersInDatabase(
         missingClustersData); // Pass Data to SQFlite Worker so that new Entrys can be added
 
+    await update1;
     // Erzeuge Nun Missing Levels
     List<LevelType> missingLevelsData = [];
+
+    var levelClusterIDs = <int>[];
+    for (var missingLevelName in missingLevelNames) {
+      levelClusterIDs.add(clusterData
+          .firstWhere((cluster) => cluster.level.contains(missingLevelName))
+          .index);
+    }
 
     for (var i = 0; i < missingLevelNames.length; i++) {
       // Für jedes Level parse das korrekte Dokument und lese daten aus
@@ -57,15 +65,12 @@ class PreinstalledLevelWorker {
       //    SolutionBoard: [List of cells with type & value]
       // }
 
-      final newDataPiece =
-          LevelType.fromLevelFile(rawData, missingClusterIDs[i]);
+      final newDataPiece = LevelType.fromLevelFile(rawData, levelClusterIDs[i]);
 
       missingLevelsData.add(newDataPiece);
     }
-
     var update2 = SQFLiteWorker.storeLevelsInDatabase(
         missingLevelsData); // Pass Data to SQFlite Worker so that new Entrys can be added
-
     await update1;
     await update2;
   }

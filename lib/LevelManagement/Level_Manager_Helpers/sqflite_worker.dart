@@ -27,7 +27,8 @@ class SQFLiteWorker {
   }
 
   static Future createDatabaseTablesIfNotExistant() async {
-    // await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
+    await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
+    await openedDatabase.execute("DROP TABLE IF EXISTS clusters"); // Dev only
     // Table 1: Clusters
     await openedDatabase.execute("CREATE TABLE IF NOT EXISTS clusters ("
         "id INTEGER PRIMARY KEY,"
@@ -76,8 +77,8 @@ class SQFLiteWorker {
       List<ClusterType> unstoredClusters) async {
     await openedDatabase.transaction((txn) async {
       for (var unstoredCluster in unstoredClusters) {
-        var id = await txn.rawInsert("INSERT INTO levels(id, name)"
-            "VALUES('${unstoredCluster.index}', '${unstoredCluster.name}'");
+        var id = await txn.rawInsert("INSERT INTO clusters(id, name)"
+            "VALUES('${unstoredCluster.index}', '${unstoredCluster.name}')");
         debugPrint("New Cluster Element with ID $id inserted");
       }
     });
@@ -87,16 +88,20 @@ class SQFLiteWorker {
     await openedDatabase.transaction((txn) async {
       for (var unstoredLevel in unstoredLevels) {
         // create and serialize emptyBoardState-object. This is stored in ProgressData
-        var serializedBoard = BoardState.createFromJson(
+        var serializedProgressBoard = BoardState.createFromJson(
                 unstoredLevel.emptyBoardData, unstoredLevel.size)
             .serializeToString();
-
+        // var id = await txn.rawInsert(
+        //     "INSERT INTO levels(level_identifier, level_display_name, empty_board, progress_board, solution_board, size, status, time, cluster_id)"
+        //     "VALUES('${unstoredLevel.levelIdentifier}', '${unstoredLevel.levelDisplayName}','${unstoredLevel.emptyBoardData}'"
+        //     "'$serializedProgressBoard', '${unstoredLevel.solvedBoardData}', '${unstoredLevel.size}', '0', '0'"
+        //     "${unstoredLevel.clusterId})");
         var id = await txn.rawInsert(
             "INSERT INTO levels(level_identifier, level_display_name, empty_board, progress_board, solution_board, size, status, time, cluster_id)"
-            "VALUES('${unstoredLevel.levelIdentifier}', '${unstoredLevel.levelDisplayName}','${unstoredLevel.emptyBoardData}',"
-            "'$serializedBoard', '${unstoredLevel.solvedBoardData}', '${unstoredLevel.size}', '0', '0'"
+            "VALUES('${unstoredLevel.levelIdentifier}','${unstoredLevel.levelDisplayName}','test',"
+            "'test','test','${unstoredLevel.size}','0','0',"
             "${unstoredLevel.clusterId})");
-        debugPrint("New Element with ID $id inserted");
+        debugPrint("New Level-Element with ID $id inserted");
       }
     });
   }
