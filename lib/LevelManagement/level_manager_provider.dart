@@ -50,6 +50,9 @@ class LevelManagerProvider extends ChangeNotifier {
     } else {
       await SQFLiteWorker.writeNewTimeProgressToDatabase(levelName, newTime);
     }
+    var metaData = levelMetaData
+        .firstWhere((element) => element.levelIdentifier == levelName);
+    metaData.status = Status.inProgress;
   }
 
   Future writeLevelGotFinishedToDB(String levelName, int endTime) async {
