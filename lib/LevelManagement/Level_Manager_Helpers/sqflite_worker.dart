@@ -27,8 +27,8 @@ class SQFLiteWorker {
   }
 
   static Future createDatabaseTablesIfNotExistant() async {
-    // await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
-    // await openedDatabase.execute("DROP TABLE IF EXISTS clusters"); // Dev only
+    await openedDatabase.execute("DROP TABLE IF EXISTS levels"); // Dev only
+    await openedDatabase.execute("DROP TABLE IF EXISTS clusters"); // Dev only
     // Table 1: Clusters
     await openedDatabase.execute("CREATE TABLE IF NOT EXISTS clusters ("
         "id INTEGER PRIMARY KEY,"
@@ -126,10 +126,10 @@ class SQFLiteWorker {
   }
 
   static Future<LevelType> fetchFullStoredLevelDataForSpecificLevel(
-      String level_identifier) async {
+      String levelIdentifier) async {
     var query = await openedDatabase.rawQuery(
-        "SELECT * FROM levels WHERE level_identifier = '$level_identifier'");
-    debugPrint("Fetched Detail Data for Lvl $level_identifier");
+        "SELECT * FROM levels WHERE level_identifier = '$levelIdentifier'");
+    debugPrint("Fetched Detail Data for Lvl $levelIdentifier");
     return LevelType()
       ..levelIdentifier = query.first["level_identifier"] as String
       ..levelDisplayName = query.first["level_display_name"] as String
