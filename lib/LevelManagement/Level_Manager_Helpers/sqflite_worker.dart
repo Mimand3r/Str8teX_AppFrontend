@@ -105,7 +105,6 @@ class SQFLiteWorker {
   static Future<List<MetaDataType>> fetchMetaDataForAllStoredLevels() async {
     var query = await openedDatabase.rawQuery(
         'SELECT level_identifier, level_display_name, size, status, time FROM levels');
-    debugPrint("Fetched All Meta Data from db. ${query.length} Elements");
     List<MetaDataType> metaListe = [];
 
     for (var el in query) {
@@ -121,7 +120,8 @@ class SQFLiteWorker {
           time: el["time"] as int);
       metaListe.add(newElement);
     }
-
+    debugPrint("MetaData for all Levels was read from DB");
+    debugPrint(metaListe.map((e) => e.time).toList().join(','));
     return metaListe;
   }
 
@@ -163,7 +163,7 @@ class SQFLiteWorker {
     await openedDatabase.rawUpdate(
         "UPDATE levels SET time = ?, status = 2 WHERE level_identifier = '$levelName'",
         [newTime]);
-    debugPrint("Level $levelName changed to Finished in DB");
+    debugPrint("Level $levelName changed to Finished in DB. Time: $newTime");
   }
 
   static Future resetLevelInDatabase(
