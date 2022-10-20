@@ -66,8 +66,7 @@ class _BoardPageState extends State<BoardPage> {
       } else {
         return Scaffold(
           body: SafeArea(
-            child: IngamePage(
-              size: metaData!.size,
+            child: WinningPage(
               metaData: metaData as MetaDataType,
             ),
           ),

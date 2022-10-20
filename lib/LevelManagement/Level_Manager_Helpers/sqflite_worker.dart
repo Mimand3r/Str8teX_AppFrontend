@@ -121,7 +121,6 @@ class SQFLiteWorker {
       metaListe.add(newElement);
     }
     debugPrint("MetaData for all Levels was read from DB");
-    debugPrint(metaListe.map((e) => e.time).toList().join(','));
     return metaListe;
   }
 
