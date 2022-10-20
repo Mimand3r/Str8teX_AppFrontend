@@ -59,12 +59,14 @@ class LevelManagerProvider extends ChangeNotifier {
     var metaData = levelMetaData
         .firstWhere((element) => element.levelIdentifier == levelName);
     metaData.status = Status.inProgress;
+    metaData.time = newTime;
   }
 
   Future writeLevelGotFinishedToDB(String levelName, int endTime) async {
     var metaData = levelMetaData
         .firstWhere((element) => element.levelIdentifier == levelName);
     metaData.status = Status.finished;
+    metaData.time = endTime;
     notifyListeners();
     await SQFLiteWorker.writeLevelFinishedToDatabase(levelName, endTime);
   }
@@ -73,6 +75,7 @@ class LevelManagerProvider extends ChangeNotifier {
     var metaData = levelMetaData
         .firstWhere((element) => element.levelIdentifier == levelName);
     metaData.status = Status.inProgress;
+    metaData.time = 0;
     notifyListeners();
     var data =
         await SQFLiteWorker.fetchFullStoredLevelDataForSpecificLevel(levelName);
