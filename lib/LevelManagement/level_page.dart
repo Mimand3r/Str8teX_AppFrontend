@@ -41,7 +41,7 @@ class _LevelPageState extends State<LevelPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  e.levelIdentifier,
+                                  e.levelDisplayName,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
