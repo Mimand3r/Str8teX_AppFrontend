@@ -8,8 +8,8 @@ import '../Board/Types/board_state_type.dart';
 
 class LevelManagerProvider extends ChangeNotifier {
   late List<MetaDataType> levelMetaData;
-
   static late LevelManagerProvider instance;
+  bool isDevMode = true; // TODO change for production
 
   LevelManagerProvider() {
     instance = this;
@@ -31,6 +31,12 @@ class LevelManagerProvider extends ChangeNotifier {
 
     // Load Metadata for all internal Levels
     levelMetaData = await SQFLiteWorker.fetchMetaDataForAllStoredLevels();
+
+    // In DevMode only: mark 1 level as finished
+    if (isDevMode) {
+      var data = await SQFLiteWorker.getAllStoredDataIDsOrNames();
+      await writeLevelGotFinishedToDB(data[1][data[1].length - 2], 200);
+    }
   }
 
   Future<LevelType> loadFullLevelData(String levelName) async {
